@@ -46,7 +46,7 @@ class ViewController: UIViewController {
             
             if count == 0 {
                 
-                x = margin - ( l.frame.size.width / 2 )
+                x = margin + ( l.frame.size.width / 2 )
                 y = margin
                 
             } else {
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
                 // if it's more than width, then wrap around again
                 if test > CGFloat( width ) {
                     
-                    x = margin - ( l.frame.size.width / 2 )
+                    x = margin + ( l.frame.size.width / 2 )
                     row = row + 1.0
                     
                 } else {
