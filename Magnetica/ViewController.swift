@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  Magnetica
 //
-//  Created by Therese Henriksson on 2/5/18.
+//  Created by Therese Henriksson and Yanchun Wu on 2/5/18.
 //  Copyright © 2018 Therese Henriksson. All rights reserved.
 //
 
@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     
     func placeWords() {
         view.backgroundColor = UIColor.orange
-        let margin: CGFloat = 60
+        let margin: CGFloat = 40
         let width: CGFloat = view.frame.width - margin
 
         var count: CGFloat = 0
@@ -38,8 +38,8 @@ class ViewController: UIViewController {
             l.sizeToFit()
             
             // resize the labels
-            l.frame.size.height = 40
-            l.frame.size.width = l.frame.size.width + 20
+            l.frame.size.height = 30
+            l.frame.size.width = l.frame.size.width + 15
             
             var x: CGFloat = 0
             var y: CGFloat = 0

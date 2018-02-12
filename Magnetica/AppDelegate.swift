@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Magnetica
 //
-//  Created by Therese Henriksson on 2/5/18.
+//  Created by Therese Henriksson and Yanchun Wu on 2/5/18.
 //  Copyright © 2018 Therese Henriksson. All rights reserved.
 //
 
