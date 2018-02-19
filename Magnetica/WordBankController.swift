@@ -2,7 +2,7 @@
 //  WordBankController.swift
 //  Magnetica
 //
-//  Created by Therese Henriksson (RIT Student) on 2/19/18.
+//  Created by Therese Henriksson and Lydia Wu on 2/19/18.
 //  Copyright © 2018 Therese Henriksson. All rights reserved.
 //
 

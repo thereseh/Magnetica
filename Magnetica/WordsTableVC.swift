@@ -2,7 +2,7 @@
 //  WordsTableVC.swift
 //  Magnetica
 //
-//  Created by Therese Henriksson on 2/18/18.
+//  Created by Therese Henriksson and Lydia Wu on 2/18/18.
 //  Copyright © 2018 Therese Henriksson. All rights reserved.
 //
 
@@ -48,10 +48,15 @@ class WordsTableVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedWordTheme = wordThemes[indexPath.row]
         
+    }
+    
+    @IBAction func cancelTapped(sender: AnyObject) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func doneTapped(sender: AnyObject) {
         let nCenter = NotificationCenter.default
-            
-        let data = ["Theme": selectedWordTheme]
-        
+                
         for wordTheme in wordManager.wordBank {
             
             if (wordTheme.name == selectedWordTheme) {
@@ -60,11 +65,6 @@ class WordsTableVC: UITableViewController {
             }
         }
         
-        cancelTapped(sender: self)
-        
-    }
-    
-    @IBAction func cancelTapped(sender: AnyObject) {
         dismiss(animated: true, completion: nil)
     }
     

@@ -2,7 +2,7 @@
 //  MainViewController.swift
 //  Magnetica
 //
-//  Created by Therese Henriksson and Yanchun Wu on 2/5/18.
+//  Created by Therese Henriksson and Lydia Wu on 2/5/18.
 //  Copyright © 2018 Therese Henriksson. All rights reserved.
 //
 
@@ -12,19 +12,20 @@ let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
 class ViewController: UIViewController {
     
-    var prevWord = [CGFloat]()
+    var previousLabel = [CGFloat]()
+    var prevLabelXPos:CGFloat = 0
+    var prevLabelWidth:CGFloat = 0
+    var wordManager: WordBank!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("main viewDidLoad")
-        prevWord.append(0)
-        prevWord.append(0)
+        wordManager = WordBank()
         
         let nCenter = NotificationCenter.default
         nCenter.addObserver(self, selector: #selector(updateScreen), name: myWordThemeChangedNotification, object: nil)
         
-       // placeWords(theme: "theme1"
+       placeWords(theme: wordManager.wordBank[0].value)
     }
     
     //MARK: - Cleanup -
@@ -36,12 +37,10 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor.orange
         
         let margin: CGFloat = 40
-        let width: CGFloat = view.frame.width - margin
+        let currentLabelwidth: CGFloat = view.frame.width - margin
 
         var count: CGFloat = 0
         var row: CGFloat = 0
-        
-        //var currentWords:[String]! = []
         
         for word in theme {
             let currentLabel = UILabel()
@@ -53,38 +52,38 @@ class ViewController: UIViewController {
             currentLabel.frame.size.height = 30
             currentLabel.frame.size.width = currentLabel.frame.size.width + 15
             
-            var x: CGFloat = 0
-            var y: CGFloat = 0
+            var currLabelXPos: CGFloat = 0
+            var currLabelYPos: CGFloat = 0
             
             if count == 0 {
                 
-                x = margin + ( currentLabel.frame.size.width / 2 )
-                y = margin
+                currLabelXPos = margin + ( currentLabel.frame.size.width / 2 )
+                currLabelYPos = margin + 10
                 
             } else {
                 // (previous X position) + (half width of previous word) + (half width of current word)
                 // would place each word next to each other, then add 10 units of space
-                let nextSize: CGFloat = ( ( prevWord[0] + ( prevWord[1] / 2 ) ) + ( currentLabel.frame.size.width / 2 ) ) + 15
+                let nextSize: CGFloat = ((prevLabelXPos + (prevLabelWidth / 2)  + (currentLabel.frame.size.width / 2))) + 15
                 
                 // if it's more than width, then wrap around again
-                if nextSize > CGFloat( width ) {
+                if nextSize > CGFloat(currentLabelwidth) {
                     
-                    x = margin + ( currentLabel.frame.size.width / 2 )
+                    currLabelXPos = margin + (currentLabel.frame.size.width / 2)
                     row = row + 1.0
                     
                 } else {
-                    x = nextSize
+                    currLabelXPos = nextSize
                 }
 
-                y = margin + ( currentLabel.frame.size.height * row ) + ( 15 * row )
+                currLabelYPos = margin + 10 + (currentLabel.frame.size.height * row) + (15 * row)
         
             }
             
             // add current word into array for next word to use
-            prevWord[0] = x
-            prevWord[1] = currentLabel.frame.size.width
+            prevLabelXPos = currLabelXPos
+            prevLabelWidth = currentLabel.frame.size.width
 
-            currentLabel.center = CGPoint( x:x, y:y )
+            currentLabel.center = CGPoint( x:currLabelXPos, y:currLabelYPos )
             currentLabel.textAlignment = .center
             view.addSubview(currentLabel)
             
@@ -104,13 +103,10 @@ class ViewController: UIViewController {
     
     // MARK: - Notifications -
     @objc func updateScreen(n:Notification) {
-        print("updateScreen called")
         let data = n.userInfo!
-        
         let currentTheme:[String] = data["Theme"] as! [String]
-        print(currentTheme)
-        clearScreen()
         
+        clearScreen()
         placeWords(theme: currentTheme)
     }
     

@@ -42,10 +42,10 @@
             </objects>
             <point key="canvasLocation" x="-682" y="88"/>
         </scene>
-        <!--My Title-->
+        <!--Theme Selector-->
         <scene sceneID="Blp-MP-sWM">
             <objects>
-                <tableViewController title="My Title" id="5Ch-KN-JQ7" customClass="WordsTableVC" customModule="Magnetica" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Theme Selector" id="5Ch-KN-JQ7" customClass="WordsTableVC" customModule="Magnetica" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="lqs-pU-dcX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -80,7 +80,11 @@
                                 <action selector="cancelTappedWithSender:" destination="5Ch-KN-JQ7" id="WcV-eE-hFc"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="A2c-fS-3jo"/>
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="A2c-fS-3jo">
+                            <connections>
+                                <action selector="doneTappedWithSender:" destination="5Ch-KN-JQ7" id="XPR-eM-5tW"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b3M-mc-49x" userLabel="First Responder" sceneMemberID="firstResponder"/>
