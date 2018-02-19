@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainViewController.swift
 //  Magnetica
 //
 //  Created by Therese Henriksson and Yanchun Wu on 2/5/18.
@@ -8,22 +8,38 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
-    let words = ["could","cloud","bot","bit","ask","a","geek","flame","file","ed","ed","create","like","lap","is","ing","I","her","drive","get","soft","screen","protect","online","meme","to","they","that","tech","space","source","y","write","while"]
+class MainViewController: UIViewController {
+    
+    let wordManager = WordBank()
     
     var prevWord = [CGFloat]()
+    
+    var currentTheme:String?
+    var currentWords:[String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         prevWord.append(0)
         prevWord.append(0)
         
+        currentTheme = wordManager.wordBank[0].name
+        
+        print("main viewDidLoad")
+        
         placeWords()
        
     }
     
     func placeWords() {
+        print("=======")
+        //print("currentTheme: \(currentTheme)")
+        
+        for wordTheme in wordManager.wordBank {
+            if (currentTheme == wordTheme.name) {
+                currentWords = wordTheme.value
+            }
+        }
+        
         view.backgroundColor = UIColor.orange
         let margin: CGFloat = 40
         let width: CGFloat = view.frame.width - margin
@@ -31,7 +47,7 @@ class ViewController: UIViewController {
         var count: CGFloat = 0
         var row: CGFloat = 0
         
-        for word in words {
+        for word in currentWords {
             let currentLabel = UILabel()
             currentLabel.backgroundColor = UIColor.white
             currentLabel.text = word
@@ -90,10 +106,11 @@ class ViewController: UIViewController {
         }
     }
     
-    @objc func doPanGesture(panGeture:UIPanGestureRecognizer) {
-        let label = panGeture.view as! UILabel
-        let position = panGeture.location(in: view)
-        label.center = position
+    func updateScreen() {
+        
+        print("updateScreen called")
+        //placeWords()
+    
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -102,7 +119,12 @@ class ViewController: UIViewController {
             wordsVC.title = "Choose a theme"
         }
     }
-
+    
+    @objc func doPanGesture(panGeture:UIPanGestureRecognizer) {
+        let label = panGeture.view as! UILabel
+        let position = panGeture.location(in: view)
+        label.center = position
+    }
 
 
 }

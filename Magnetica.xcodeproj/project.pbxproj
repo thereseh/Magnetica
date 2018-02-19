@@ -7,19 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C56CBCA203B5CB400DF330C /* WordBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C56CBC9203B5CB400DF330C /* WordBank.swift */; };
 		AE38BC2E203A667500D41655 /* WordsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE38BC2D203A667500D41655 /* WordsTableVC.swift */; };
 		AEDBD63E2028AEAA0068ADB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */; };
-		AEDBD6402028AEAA0068ADB8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */; };
+		AEDBD6402028AEAA0068ADB8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDBD63F2028AEAA0068ADB8 /* MainViewController.swift */; };
 		AEDBD6432028AEAA0068ADB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AEDBD6412028AEAA0068ADB8 /* Main.storyboard */; };
 		AEDBD6452028AEAA0068ADB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AEDBD6442028AEAA0068ADB8 /* Assets.xcassets */; };
 		AEDBD6482028AEAA0068ADB8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AEDBD6462028AEAA0068ADB8 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7C56CBC9203B5CB400DF330C /* WordBank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordBank.swift; sourceTree = "<group>"; };
 		AE38BC2D203A667500D41655 /* WordsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsTableVC.swift; sourceTree = "<group>"; };
 		AEDBD63A2028AEA90068ADB8 /* Magnetica.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Magnetica.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AEDBD63F2028AEAA0068ADB8 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		AEDBD6422028AEAA0068ADB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AEDBD6442028AEAA0068ADB8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AEDBD6472028AEAA0068ADB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -58,7 +60,8 @@
 			children = (
 				AE38BC2D203A667500D41655 /* WordsTableVC.swift */,
 				AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */,
-				AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */,
+				AEDBD63F2028AEAA0068ADB8 /* MainViewController.swift */,
+				7C56CBC9203B5CB400DF330C /* WordBank.swift */,
 				AEDBD6412028AEAA0068ADB8 /* Main.storyboard */,
 				AEDBD6442028AEAA0068ADB8 /* Assets.xcassets */,
 				AEDBD6462028AEAA0068ADB8 /* LaunchScreen.storyboard */,
@@ -140,7 +143,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE38BC2E203A667500D41655 /* WordsTableVC.swift in Sources */,
-				AEDBD6402028AEAA0068ADB8 /* ViewController.swift in Sources */,
+				7C56CBCA203B5CB400DF330C /* WordBank.swift in Sources */,
+				AEDBD6402028AEAA0068ADB8 /* MainViewController.swift in Sources */,
 				AEDBD63E2028AEAA0068ADB8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -283,6 +287,10 @@
 				DEVELOPMENT_TEAM = X4F9ZS23VV;
 				INFOPLIST_FILE = Magnetica/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.theresehenriksson.Magnetica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -300,6 +308,10 @@
 				DEVELOPMENT_TEAM = X4F9ZS23VV;
 				INFOPLIST_FILE = Magnetica/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.theresehenriksson.Magnetica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

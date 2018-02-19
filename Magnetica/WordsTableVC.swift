@@ -9,27 +9,20 @@
 import UIKit
 
 class WordsTableVC: UITableViewController {
-
-    let word1:[String] = ["could","cloud","bot","bit","ask","a","geek","flame","file","ed","ed","create","like","lap","is","ing","I","her","drive","get","soft","screen","protect","online","meme","to","they","that","tech","space","source","y","write","while"]
-    let word2 = ["she", "sinister", "smart", "so", "soft", "some", "source", "space"]
-    let word3 = ["good", "goodness", "grease", "has", "have", "he", "hear", "heart", "her"]
     
-    var wordThemes:[(name: String, value: [String])] = []
-    
-    var selectedWordTheme:[String] = []
+    var wordThemes:[String] = []
+    let wordManager = WordBank()
+    var selectedWordTheme:String = "theme1"
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        wordThemes.append((name: "Theme1", value: word1))
-        wordThemes.append(contentsOf: [(name: "Theme2", value: word2)])
-        wordThemes += [(name: "Theme3", value: word3)]
+        for wordTheme in wordManager.wordBank {
+            wordThemes.append(wordTheme.name)
+        }
         
-        selectedWordTheme = word1
     }
 
-
-    // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -47,7 +40,7 @@ class WordsTableVC: UITableViewController {
 
         let currentTuple = wordThemes[indexPath.row]
         
-        let currentTupleName = currentTuple.name
+        let currentTupleName = currentTuple
         
         cell.textLabel?.text = currentTupleName
         
@@ -55,8 +48,16 @@ class WordsTableVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedWordTheme = wordThemes[indexPath.row].value
+        selectedWordTheme = wordThemes[indexPath.row]
+        
+        let mainViewController:MainViewController? = MainViewController()
+        
+        mainViewController?.currentTheme = selectedWordTheme
+        
+        mainViewController?.updateScreen()
         print(selectedWordTheme)
+        
+        cancelTapped(sender:self)
     }
     
     @IBAction func cancelTapped(sender: AnyObject) {
