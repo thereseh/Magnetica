@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE38BC2E203A667500D41655 /* WordsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE38BC2D203A667500D41655 /* WordsTableVC.swift */; };
 		AEDBD63E2028AEAA0068ADB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */; };
 		AEDBD6402028AEAA0068ADB8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */; };
 		AEDBD6432028AEAA0068ADB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AEDBD6412028AEAA0068ADB8 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE38BC2D203A667500D41655 /* WordsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsTableVC.swift; sourceTree = "<group>"; };
 		AEDBD63A2028AEA90068ADB8 /* Magnetica.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Magnetica.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +56,7 @@
 		AEDBD63C2028AEAA0068ADB8 /* Magnetica */ = {
 			isa = PBXGroup;
 			children = (
+				AE38BC2D203A667500D41655 /* WordsTableVC.swift */,
 				AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */,
 				AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */,
 				AEDBD6412028AEAA0068ADB8 /* Main.storyboard */,
@@ -136,6 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE38BC2E203A667500D41655 /* WordsTableVC.swift in Sources */,
 				AEDBD6402028AEAA0068ADB8 /* ViewController.swift in Sources */,
 				AEDBD63E2028AEAA0068ADB8 /* AppDelegate.swift in Sources */,
 			);
@@ -274,12 +278,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X4F9ZS23VV;
 				INFOPLIST_FILE = Magnetica/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.theresehenriksson.Magnetica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -289,12 +295,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X4F9ZS23VV;
 				INFOPLIST_FILE = Magnetica/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.theresehenriksson.Magnetica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
