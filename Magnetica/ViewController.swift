@@ -7,47 +7,43 @@
 //
 
 import UIKit
+let myWordThemeChangedNotification = NSNotification.Name("themeChangedNotification")
+let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
-class MainViewController: UIViewController {
-    
-    let wordManager = WordBank()
+class ViewController: UIViewController {
     
     var prevWord = [CGFloat]()
     
-    var currentTheme:String?
-    var currentWords:[String] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        prevWord.append(0)
-        prevWord.append(0)
-        
-        currentTheme = wordManager.wordBank[0].name
         
         print("main viewDidLoad")
+        prevWord.append(0)
+        prevWord.append(0)
         
-        placeWords()
-       
+        let nCenter = NotificationCenter.default
+        nCenter.addObserver(self, selector: #selector(updateScreen), name: myWordThemeChangedNotification, object: nil)
+        
+       // placeWords(theme: "theme1"
     }
     
-    func placeWords() {
-        print("=======")
-        //print("currentTheme: \(currentTheme)")
-        
-        for wordTheme in wordManager.wordBank {
-            if (currentTheme == wordTheme.name) {
-                currentWords = wordTheme.value
-            }
-        }
-        
+    //MARK: - Cleanup -
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func placeWords(theme: [String]) {
         view.backgroundColor = UIColor.orange
+        
         let margin: CGFloat = 40
         let width: CGFloat = view.frame.width - margin
 
         var count: CGFloat = 0
         var row: CGFloat = 0
         
-        for word in currentWords {
+        //var currentWords:[String]! = []
+        
+        for word in theme {
             let currentLabel = UILabel()
             currentLabel.backgroundColor = UIColor.white
             currentLabel.text = word
@@ -106,11 +102,24 @@ class MainViewController: UIViewController {
         }
     }
     
-    func updateScreen() {
-        
+    // MARK: - Notifications -
+    @objc func updateScreen(n:Notification) {
         print("updateScreen called")
-        //placeWords()
+        let data = n.userInfo!
+        
+        let currentTheme:[String] = data["Theme"] as! [String]
+        print(currentTheme)
+        clearScreen()
+        
+        placeWords(theme: currentTheme)
+    }
     
+    func clearScreen() {
+        for v in view.subviews{
+            if v is UILabel{
+                v.removeFromSuperview()
+            }
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -125,7 +134,6 @@ class MainViewController: UIViewController {
         let position = panGeture.location(in: view)
         label.center = position
     }
-
 
 }
 

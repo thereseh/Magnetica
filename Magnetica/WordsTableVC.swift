@@ -11,15 +11,17 @@ import UIKit
 class WordsTableVC: UITableViewController {
     
     var wordThemes:[String] = []
-    let wordManager = WordBank()
     var selectedWordTheme:String = "theme1"
+    var wordManager: WordBank!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        wordManager = WordBank()
         for wordTheme in wordManager.wordBank {
+            
             wordThemes.append(wordTheme.name)
-        }
+       }
         
     }
 
@@ -37,12 +39,8 @@ class WordsTableVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        let currentTuple = wordThemes[indexPath.row]
         
-        let currentTupleName = currentTuple
-        
-        cell.textLabel?.text = currentTupleName
+        cell.textLabel?.text = wordThemes[indexPath.row]
         
         return cell
     }
@@ -50,19 +48,26 @@ class WordsTableVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedWordTheme = wordThemes[indexPath.row]
         
-        let mainViewController:MainViewController? = MainViewController()
+        let nCenter = NotificationCenter.default
+            
+        let data = ["Theme": selectedWordTheme]
         
-        mainViewController?.currentTheme = selectedWordTheme
+        for wordTheme in wordManager.wordBank {
+            
+            if (wordTheme.name == selectedWordTheme) {
+                let data = ["Theme": wordTheme.value]
+                nCenter.post(name: myWordThemeChangedNotification, object: self, userInfo: data)
+            }
+        }
         
-        mainViewController?.updateScreen()
-        print(selectedWordTheme)
+        cancelTapped(sender: self)
         
-        cancelTapped(sender:self)
     }
     
     @IBAction func cancelTapped(sender: AnyObject) {
         dismiss(animated: true, completion: nil)
     }
+    
 
 
 }
