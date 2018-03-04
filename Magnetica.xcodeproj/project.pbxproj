@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7C56CBCA203B5CB400DF330C /* WordBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C56CBC9203B5CB400DF330C /* WordBank.swift */; };
-		7C56CBCC203B76DE00DF330C /* WordBankController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C56CBCB203B76DE00DF330C /* WordBankController.swift */; };
+		7C56CBCC203B76DE00DF330C /* MagneticaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C56CBCB203B76DE00DF330C /* MagneticaVC.swift */; };
+		7CE24934204B5EC2009457CB /* SettingsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE24933204B5EC2009457CB /* SettingsTableVC.swift */; };
 		AE38BC2E203A667500D41655 /* WordsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE38BC2D203A667500D41655 /* WordsTableVC.swift */; };
 		AEDBD63E2028AEAA0068ADB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */; };
 		AEDBD6402028AEAA0068ADB8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */; };
@@ -19,7 +20,8 @@
 
 /* Begin PBXFileReference section */
 		7C56CBC9203B5CB400DF330C /* WordBank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordBank.swift; sourceTree = "<group>"; };
-		7C56CBCB203B76DE00DF330C /* WordBankController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordBankController.swift; sourceTree = "<group>"; };
+		7C56CBCB203B76DE00DF330C /* MagneticaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticaVC.swift; sourceTree = "<group>"; };
+		7CE24933204B5EC2009457CB /* SettingsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableVC.swift; sourceTree = "<group>"; };
 		AE38BC2D203A667500D41655 /* WordsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsTableVC.swift; sourceTree = "<group>"; };
 		AEDBD63A2028AEA90068ADB8 /* Magnetica.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Magnetica.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -41,6 +43,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7CE24931204B5166009457CB /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				7C56CBCB203B76DE00DF330C /* MagneticaVC.swift */,
+				7CE24933204B5EC2009457CB /* SettingsTableVC.swift */,
+				AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */,
+				AE38BC2D203A667500D41655 /* WordsTableVC.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
+		};
+		7CE24932204B51F1009457CB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7C56CBC9203B5CB400DF330C /* WordBank.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		AEDBD6312028AEA90068ADB8 = {
 			isa = PBXGroup;
 			children = (
@@ -60,11 +81,9 @@
 		AEDBD63C2028AEAA0068ADB8 /* Magnetica */ = {
 			isa = PBXGroup;
 			children = (
-				AE38BC2D203A667500D41655 /* WordsTableVC.swift */,
 				AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */,
-				AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */,
-				7C56CBCB203B76DE00DF330C /* WordBankController.swift */,
-				7C56CBC9203B5CB400DF330C /* WordBank.swift */,
+				7CE24932204B51F1009457CB /* Model */,
+				7CE24931204B5166009457CB /* VC */,
 				AEDBD6412028AEAA0068ADB8 /* Main.storyboard */,
 				AEDBD6442028AEAA0068ADB8 /* Assets.xcassets */,
 				AEDBD6462028AEAA0068ADB8 /* LaunchScreen.storyboard */,
@@ -149,7 +168,8 @@
 				7C56CBCA203B5CB400DF330C /* WordBank.swift in Sources */,
 				AEDBD6402028AEAA0068ADB8 /* ViewController.swift in Sources */,
 				AEDBD63E2028AEAA0068ADB8 /* AppDelegate.swift in Sources */,
-				7C56CBCC203B76DE00DF330C /* WordBankController.swift in Sources */,
+				7CE24934204B5EC2009457CB /* SettingsTableVC.swift in Sources */,
+				7C56CBCC203B76DE00DF330C /* MagneticaVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

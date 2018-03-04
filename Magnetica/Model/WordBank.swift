@@ -8,15 +8,15 @@
 
 import Foundation
 
-class WordBank{
+class WordBank {
     var wordBank: [(name: String, value: [String])]
     
-    init(){
+    init() {
         wordBank = []
         initWordThemes()
     }
     
-    func initWordThemes(){
+    func initWordThemes() {
         let theme1: [String] = ["could","cloud","bot","bit","ask","a","geek","flame","file","ed","ed","create","like","lap","is","ing","I","her","drive","get","soft","screen","protect","online","meme","to","they","that","tech","space","source","y","write","while"]
         let emojis: [String] = ["😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿","😾", "😀", "😁", "😂", "🤣","😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "☺️", "🙂", "🤗", "🤔", "😐", "😑", "😶", "🙄", "😏", "😣", "😥"]
         let theme2: [String] = ["she", "sinister", "smart", "so", "soft", "some", "source", "space"]

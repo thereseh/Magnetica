@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         nCenter.addObserver(self, selector: #selector(updateScreen), name: myWordThemeChangedNotification, object: nil)
         
        placeWords(theme: wordManager.wordBank[0].value)
+        
     }
     
     //MARK: - Cleanup -
@@ -123,7 +124,13 @@ class ViewController: UIViewController {
             let wordsVC = segue.destination.childViewControllers[0] as! WordsTableVC
             wordsVC.title = "Choose a theme"
         }
+        
+        if segue.identifier == "showSettingsSegue" {
+            print("click settings")
+        }
     }
+    
+    
     
     @objc func doPanGesture(panGeture:UIPanGestureRecognizer) {
         let label = panGeture.view as! UILabel
