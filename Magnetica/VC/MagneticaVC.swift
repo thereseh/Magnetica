@@ -8,21 +8,9 @@
 
 import UIKit
 
-// Swift constants
-struct Constants {
-    struct CounterModel {
-        static let defaultDate: Date? = nil
-        static let defaultCounter: Int = 0
-    }
-}
 
 class MagneticaVC {
     
-    var currentTheme:String = ""
-    var currentWords:[String] = []
-    
-    
-    let familyNames = UIFont.familyNames
     
     init() {
 

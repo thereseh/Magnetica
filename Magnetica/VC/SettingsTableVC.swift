@@ -12,8 +12,15 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
 
     // ivar
     let familyNames = UIFont.familyNames
-    let fontColors = [(name: "Black", value: UIColor.black), (name: "Blue", value: UIColor.blue),
-                      (name: "Red", value: UIColor.red), (name: "Green", value: UIColor.green)]
+    var fontStyle:String = Constants.MagneticaConstants.defaultFontStyle
+    var fontSize: Int = 0
+    var backgroundColor: UIColor = Constants.MagneticaConstants.defaultBackgroundColor
+    
+    let backgroundColors = [(name: "Black", value: UIColor.black), (name: "Blue", value: UIColor.blue),
+                      (name: "Red", value: UIColor.red), (name: "Green", value: UIColor.green),
+                      (name: "Browm", value: UIColor.brown), (name: "Cyan", value: UIColor.cyan),
+                      (name: "Dark Gray", value: UIColor.darkGray), (name: "Light Gray", value: UIColor.lightGray)]
+    
     var magneticaVC: MagneticaVC!
     
     // outlets
@@ -22,6 +29,7 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
     @IBOutlet weak var fontSizeOnChangeLabel: UILabel!
     @IBOutlet weak var fontSizeSlider: UISlider!
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,19 +41,17 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
         
     }
     
-    
     // Functions
-    // The number of columns of data
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    // The number of rows of data
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        // The number of rows of data
         if pickerView.tag == 1 {
             return familyNames.count
         } else {
-            return fontColors.count
+            return backgroundColors.count
         }
     }
     
@@ -70,17 +76,27 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
             
             if fontColorLabel == nil {
                 fontColorLabel = UILabel()
-                fontColorLabel?.font = UIFont(name: "helvetica neue", size: 16)
+                fontColorLabel?.font = UIFont(name: Constants.MagneticaConstants.defaultFontStyle, size: 16)
                 fontColorLabel?.textAlignment = .center
             }
             
-            fontColorLabel?.text = fontColors[row].name
-            fontColorLabel?.textColor = fontColors[row].value
+            fontColorLabel?.text = backgroundColors[row].name
+            fontColorLabel?.textColor = backgroundColors[row].value
             
             return fontColorLabel!
         }
     }
     
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // use the row to get the selected row from the picker view
+        // using the row extract the value from your datasource (array[row])
+        
+        if pickerView.tag == 1 {
+            fontStyle = familyNames[row]
+        } else {
+            backgroundColor = backgroundColors[row].value
+        }
+    }
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -97,9 +113,9 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
         self.present(imagePickerController, animated: true, completion: nil)
     }
     
-    //MARK
+    //MARK -Imagepicker-
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        print("finished picking")
+       
         let nCenter = NotificationCenter.default
         
         nCenter.post(name: backgroundImageChangedNotification, object: self, userInfo: info)
@@ -107,9 +123,9 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
     }
     
     @objc func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("cancelled")
         picker.dismiss(animated: true, completion: nil)
     }
+    
     
     
     // IBActions
@@ -118,21 +134,22 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
     }
     
     @IBAction func doneTapped(sender: AnyObject) {
-        //let nCenter = NotificationCenter.default
+        let nCenter = NotificationCenter.default
         
-//        for wordTheme in wordManager.wordBank {
-//
-//            if (wordTheme.name == selectedWordTheme) {
-//                let data = ["Theme": wordTheme.value]
-//                nCenter.post(name: myWordThemeChangedNotification, object: self, userInfo: data)
-//            }
-//        }
+        let dataFontStyle = ["Style": fontStyle]
+        let dataFontSize = ["Size": fontSize]
+        let dataBackgroundColor = ["Color": backgroundColor]
         
+        nCenter.post(name: fontStyleChangedNotification, object: self, userInfo: dataFontStyle)
+        nCenter.post(name: fontSizeChangedNotification, object: self, userInfo: dataFontSize)
+        nCenter.post(name: backgroundColorChangedNotification, object: self, userInfo: dataBackgroundColor)
+        nCenter.post(name: updateScreenNotification, object: self, userInfo: nil)
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction func fontSizeOnChange(_ sender: UISlider) {
         fontSizeOnChangeLabel.text = String(round(sender.value))
+        fontSize = Int(round(sender.value))
         sender.setValue(round(sender.value), animated: true)
     }
     

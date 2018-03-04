@@ -9,6 +9,11 @@
 import UIKit
 let myWordThemeChangedNotification = NSNotification.Name("themeChangedNotification")
 let backgroundImageChangedNotification = NSNotification.Name("backgroundImageChangedNotification")
+let fontStyleChangedNotification = NSNotification.Name("fontStyleChangedNotification")
+let fontSizeChangedNotification = NSNotification.Name("fontSizeChangedNotification")
+let backgroundColorChangedNotification = NSNotification.Name("backgroundColorChangedNotification")
+let updateScreenNotification = NSNotification.Name("updateScreenNotification")
+
 let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
 class ViewController: UIViewController {
@@ -17,20 +22,43 @@ class ViewController: UIViewController {
     var previousLabel = [CGFloat]()
     var prevLabelXPos:CGFloat = 0
     var prevLabelWidth:CGFloat = 0
+    
     var wordManager: WordBank!
+    //var magneticaModel: MagneticaModel!
+    
     var backgroundImage:UIImage?
+    var backgroundColor:UIColor?
+    
+    var fontStyle: String = ""
+    var fontSize: Int = 0
+    
+    var currentTheme: [WordModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         wordManager = WordBank()
         
+        backgroundColor = Constants.MagneticaConstants.defaultBackgroundColor
+        fontStyle = Constants.MagneticaConstants.defaultFontStyle
+        
+        if isPad {
+            fontSize = Constants.MagneticaConstants.defaultFontSizeiPad
+        } else {
+            fontSize = Constants.MagneticaConstants.defaultFontSizeiPhone
+        }
+        
         let nCenter = NotificationCenter.default
-        nCenter.addObserver(self, selector: #selector(updateScreen), name: myWordThemeChangedNotification, object: nil)
+        nCenter.addObserver(self, selector: #selector(updateScreen), name: updateScreenNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(updateBackground), name: backgroundImageChangedNotification, object: nil)
+        nCenter.addObserver(self, selector: #selector(updateFontStyle), name: fontStyleChangedNotification, object: nil)
+        nCenter.addObserver(self, selector: #selector(updateFontSize), name: fontSizeChangedNotification, object: nil)
+        nCenter.addObserver(self, selector: #selector(updateBackgroundColor), name: backgroundColorChangedNotification, object: nil)
+        nCenter.addObserver(self, selector: #selector(updateTheme), name: myWordThemeChangedNotification, object: nil)
         
-       placeWords(theme: wordManager.wordBank[0].value)
+        currentTheme = wordManager.wordBank[Constants.MagneticaConstants.defaultTheme]!
         
+        placeWords()
     }
     
     //MARK: - Cleanup -
@@ -38,8 +66,8 @@ class ViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func placeWords(theme: [String]) {
-        view.backgroundColor = UIColor.orange
+    func placeWords() {
+        view.backgroundColor = backgroundColor
         
         let margin: CGFloat = 40
         let currentLabelwidth: CGFloat = view.frame.width - margin
@@ -47,14 +75,16 @@ class ViewController: UIViewController {
         var count: CGFloat = 0
         var row: CGFloat = 0
         
-        for word in theme {
+        for word in currentTheme {
             let currentLabel = UILabel()
             currentLabel.backgroundColor = UIColor.white
-            currentLabel.text = word
+            currentLabel.text = word.word
+            currentLabel.font = UIFont(name: fontStyle.lowercased(), size: CGFloat(fontSize))
+            print(currentLabel.font)
             currentLabel.sizeToFit()
             
             // resize the labels
-            currentLabel.frame.size.height = 30
+            currentLabel.frame.size.height = CGFloat(fontSize + 10)
             currentLabel.frame.size.width = currentLabel.frame.size.width + 15
             
             var currLabelXPos: CGFloat = 0
@@ -124,12 +154,37 @@ class ViewController: UIViewController {
         (self.view as! UIImageView).image = backgroundImage
     }
     
-    @objc func updateScreen(n:Notification) {
+    @objc func updateFontStyle(n:Notification) {
         let data = n.userInfo!
-        let currentTheme:[String] = data["Theme"] as! [String]
         
+        fontStyle = data["Style"] as! String
+        
+        print("Fontstyle: \(fontStyle)")
+    }
+    
+    @objc func updateFontSize(n:Notification) {
+        let data = n.userInfo!
+        fontSize = data["Size"] as! Int
+        
+        print("Size: \(fontSize)")
+    }
+    
+    @objc func updateBackgroundColor(n:Notification) {
+        let data = n.userInfo!
+        
+        backgroundColor = (data["Color"] as! UIColor)
+    }
+    
+    @objc func updateTheme(n:Notification) {
+        let data = n.userInfo!
+        currentTheme = data["Theme"] as! [WordModel]
+        
+        updateScreen()
+    }
+    
+    @objc func updateScreen() {
         clearScreen()
-        placeWords(theme: currentTheme)
+        placeWords()
     }
     
     

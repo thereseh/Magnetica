@@ -9,25 +9,41 @@
 import Foundation
 
 class WordBank {
-    var wordBank: [(name: String, value: [String])]
+    
+    // dictionary
+    var wordBank = [String: [WordModel]]()
     
     init() {
-        wordBank = []
         initWordThemes()
     }
     
+    // functions
     func initWordThemes() {
-        let theme1: [String] = ["could","cloud","bot","bit","ask","a","geek","flame","file","ed","ed","create","like","lap","is","ing","I","her","drive","get","soft","screen","protect","online","meme","to","they","that","tech","space","source","y","write","while"]
-        let emojis: [String] = ["😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿","😾", "😀", "😁", "😂", "🤣","😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "☺️", "🙂", "🤗", "🤔", "😐", "😑", "😶", "🙄", "😏", "😣", "😥"]
-        let theme2: [String] = ["she", "sinister", "smart", "so", "soft", "some", "source", "space"]
-        let theme3: [String] = ["good", "goodness", "grease", "has", "have", "he", "hear", "heart", "her"]
-        let theme4: [String] = ["Star Wars"]
+        let strings1: [String] = ["could","cloud","bot","bit","ask","a","geek","flame","file","ed","ed","create","like","lap","is","ing","I","her","drive","get","soft","screen","protect","online","meme","to","they","that","tech","space","source","y","write","while"]
+        let strings2: [String] = ["she", "sinister", "smart", "so", "soft", "some", "source", "space"]
+        let strings3: [String] = ["good", "goodness", "grease", "has", "have", "he", "hear", "heart", "her"]
+        let strings4: [String] = ["Star Wars"]
+        let icons: [String] = ["😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿","😾", "😀", "😁", "😂", "🤣","😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "☺️", "🙂", "🤗", "🤔", "😐", "😑", "😶", "🙄", "😏", "😣", "😥"]
         
+        let theme1: [WordModel] = createWordModelArrays(array: strings1)
+        let theme2: [WordModel] = createWordModelArrays(array: strings2)
+        let theme3: [WordModel] = createWordModelArrays(array: strings3)
+        let theme4: [WordModel] = createWordModelArrays(array: strings4)
+        let emojis: [WordModel] = createWordModelArrays(array: icons)
+    
         
-        wordBank.append((name: "Harry Potter", value: theme1))
-        wordBank.append((name: "Marvel", value: theme2))
-        wordBank.append((name: "Overwatch", value: theme3))
-        wordBank.append((name: "Star Wars", value: theme4))
-        wordBank.append((name: "emojis", value: emojis))
+        wordBank["Harry Potter"] = theme1
+        wordBank["Marvel"] = theme2
+        wordBank["Overwatch"] = theme3
+        wordBank["Star Wars"] = theme4
+        wordBank["Emojis"] = emojis
+    }
+    
+    func createWordModelArrays(array: [String]) -> [WordModel] {
+        var arrayOfWordModelObjects = [WordModel]()
+        for word in array {
+            arrayOfWordModelObjects.append(WordModel(word: word))
+        }
+        return arrayOfWordModelObjects
     }
 }

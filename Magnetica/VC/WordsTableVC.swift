@@ -10,18 +10,16 @@ import UIKit
 
 class WordsTableVC: UITableViewController {
     
-    var wordThemes:[String] = []
-    var selectedWordTheme:String = "theme1"
+    var listOfThemesToDisplay:[String] = []
+    var selectedWordTheme:String = "Harry Potter"
     var wordManager: WordBank!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         wordManager = WordBank()
-        for wordTheme in wordManager.wordBank {
-            
-            wordThemes.append(wordTheme.name)
-       }
+        
+        listOfThemesToDisplay = Array(wordManager.wordBank.keys)
         
     }
 
@@ -32,7 +30,7 @@ class WordsTableVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return wordThemes.count
+        return listOfThemesToDisplay.count
     }
 
     
@@ -40,13 +38,13 @@ class WordsTableVC: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "themeIdentifier", for: indexPath)
         
-        cell.textLabel?.text = wordThemes[indexPath.row]
+        cell.textLabel?.text = listOfThemesToDisplay[indexPath.row]
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedWordTheme = wordThemes[indexPath.row]
+        selectedWordTheme = listOfThemesToDisplay[indexPath.row]
         
     }
     
@@ -56,15 +54,11 @@ class WordsTableVC: UITableViewController {
     
     @IBAction func doneTapped(sender: AnyObject) {
         let nCenter = NotificationCenter.default
-                
-        for wordTheme in wordManager.wordBank {
-            
-            if (wordTheme.name == selectedWordTheme) {
-                let data = ["Theme": wordTheme.value]
-                nCenter.post(name: myWordThemeChangedNotification, object: self, userInfo: data)
-            }
-        }
         
+        let data = ["Theme": wordManager.wordBank[selectedWordTheme]!]
+
+        nCenter.post(name: myWordThemeChangedNotification, object: self, userInfo: data)
+
         dismiss(animated: true, completion: nil)
     }
     
