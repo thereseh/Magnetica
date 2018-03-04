@@ -8,17 +8,19 @@
 
 import UIKit
 
-class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     // ivar
     let familyNames = UIFont.familyNames
     let fontColors = [(name: "Black", value: UIColor.black), (name: "Blue", value: UIColor.blue),
                       (name: "Red", value: UIColor.red), (name: "Green", value: UIColor.green)]
-    private var kvoContext = 0
+    var magneticaVC: MagneticaVC!
     
     // outlets
     @IBOutlet weak var fontStylePicker: UIPickerView!
     @IBOutlet weak var fontColorPicker: UIPickerView!
+    @IBOutlet weak var fontSizeOnChangeLabel: UILabel!
+    @IBOutlet weak var fontSizeSlider: UISlider!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,23 +33,6 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        addObserver(self, forKeyPath: #keyPath(tableView.contentSize), options: .new, context: &kvoContext)
-        
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if context == &kvoContext, keyPath == #keyPath(tableView.contentSize),
-            let contentSize = change?[NSKeyValueChangeKey.newKey] as? CGSize  {
-            self.popoverPresentationController?.presentedViewController.preferredContentSize = contentSize
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        removeObserver(self, forKeyPath: #keyPath(tableView.contentSize))
-        super.viewDidDisappear(animated)
-    }
     
     // Functions
     // The number of columns of data
@@ -65,21 +50,69 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
     }
     
     // The data to return for the row and component (column) that's being passed in
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+
         if pickerView.tag == 1 {
-            return familyNames[row]
+            var fontStyleLabel: UILabel? = (view as? UILabel)
+            
+            if fontStyleLabel == nil {
+                fontStyleLabel = UILabel()
+                fontStyleLabel?.font = UIFont(name: familyNames[row], size: 16)
+                fontStyleLabel?.textAlignment = .center
+            }
+            
+            fontStyleLabel?.text = familyNames[row]
+            fontStyleLabel?.textColor = UIColor.black
+
+            return fontStyleLabel!
         } else {
-            return fontColors[row].name
+            var fontColorLabel: UILabel? = (view as? UILabel)
+            
+            if fontColorLabel == nil {
+                fontColorLabel = UILabel()
+                fontColorLabel?.font = UIFont(name: "helvetica neue", size: 16)
+                fontColorLabel?.textAlignment = .center
+            }
+            
+            fontColorLabel?.text = fontColors[row].name
+            fontColorLabel?.textColor = fontColors[row].value
+            
+            return fontColorLabel!
         }
     }
     
     
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //selectedWordTheme = wordThemes[indexPath.row]
+        if indexPath.section == 1 && indexPath.row == 1 {
+            selectBackgroundImage(self)
+        }
         
     }
     
+    @objc func selectBackgroundImage(_ sender: AnyObject) {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        self.present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    //MARK
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        print("finished picking")
+        let nCenter = NotificationCenter.default
+        
+        nCenter.post(name: backgroundImageChangedNotification, object: self, userInfo: info)
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        print("cancelled")
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    // IBActions
     @IBAction func cancelTapped(sender: AnyObject) {
         dismiss(animated: true, completion: nil)
     }
@@ -98,46 +131,15 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
         dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func fontSizeOnChange(_ sender: UISlider) {
+        fontSizeOnChangeLabel.text = String(round(sender.value))
+        sender.setValue(round(sender.value), animated: true)
+    }
+    
+    
 }
 
-/*extension ViewController: UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if component == 0 {
-            return colors.count
-        } else if component == 1 {
-            return pets.count
-        }
-        return 0
-    }
-}
 
-extension ViewController: UIPickerViewDelegate {
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
-        if component == 0 {
-            return colors[row]
-        } else if component == 1 {
-            return pets[row]
-        }
-        
-        return nil
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if component == 0 {
-            currentColor = colors[row]
-        } else if component == 1 {
-            currentPet = pets[row]
-        }
-        
-        label.text = "\(currentColor) \(currentPet)"
-    }
-}*/
 
 
 

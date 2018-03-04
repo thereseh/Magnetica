@@ -8,14 +8,17 @@
 
 import UIKit
 let myWordThemeChangedNotification = NSNotification.Name("themeChangedNotification")
+let backgroundImageChangedNotification = NSNotification.Name("backgroundImageChangedNotification")
 let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
 class ViewController: UIViewController {
     
+    // ivar
     var previousLabel = [CGFloat]()
     var prevLabelXPos:CGFloat = 0
     var prevLabelWidth:CGFloat = 0
     var wordManager: WordBank!
+    var backgroundImage:UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +27,7 @@ class ViewController: UIViewController {
         
         let nCenter = NotificationCenter.default
         nCenter.addObserver(self, selector: #selector(updateScreen), name: myWordThemeChangedNotification, object: nil)
+        nCenter.addObserver(self, selector: #selector(updateBackground), name: backgroundImageChangedNotification, object: nil)
         
        placeWords(theme: wordManager.wordBank[0].value)
         
@@ -102,7 +106,24 @@ class ViewController: UIViewController {
         }
     }
     
+    func clearScreen() {
+        for v in view.subviews{
+            if v is UILabel{
+                v.removeFromSuperview()
+            }
+        }
+    }
+    
     // MARK: - Notifications -
+    @objc func updateBackground(n:Notification) {
+        var data = n.userInfo!
+        let image:UIImage = data[UIImagePickerControllerEditedImage] as! UIImage
+        
+        backgroundImage = image
+        (self.view as! UIImageView).contentMode = .center
+        (self.view as! UIImageView).image = backgroundImage
+    }
+    
     @objc func updateScreen(n:Notification) {
         let data = n.userInfo!
         let currentTheme:[String] = data["Theme"] as! [String]
@@ -111,13 +132,6 @@ class ViewController: UIViewController {
         placeWords(theme: currentTheme)
     }
     
-    func clearScreen() {
-        for v in view.subviews{
-            if v is UILabel{
-                v.removeFromSuperview()
-            }
-        }
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showThemeSegue" {

@@ -21,9 +21,10 @@ class MagneticaVC {
     var currentTheme:String = ""
     var currentWords:[String] = []
     
+    
     let familyNames = UIFont.familyNames
     
-    init(){
+    init() {
 
     }
 
