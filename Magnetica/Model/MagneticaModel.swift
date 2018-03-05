@@ -18,6 +18,8 @@ protocol MagneticaModel {
     var selectedTheme: String { get set }
     var wordPosition: [WordModel]? { get set }
     
+    var hasBackgroundImage: Bool { get set }
+    
     func save()
     func saveSettings()
     func load()

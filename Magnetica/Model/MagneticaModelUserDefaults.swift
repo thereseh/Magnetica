@@ -18,6 +18,7 @@ class MagneticaModelUserDefaults: MagneticaModel {
     var backgroundImage: UIImage?
     var selectedTheme: String
     var wordPosition: [WordModel]?
+    var hasBackgroundImage: Bool
     
     // Initializer Dependency Injection with a default value
     init(userDefaults: UserDefaults = UserDefaults.standard) {
@@ -32,7 +33,8 @@ class MagneticaModelUserDefaults: MagneticaModel {
         }
         
         backgroundColor = Constants.MagneticaConstants.defaultBackgroundColor
-        backgroundImage = Constants.MagneticaConstants.defaultBackgroundImage
+        backgroundImage = UIImage(color: .white)
+        hasBackgroundImage = Constants.MagneticaConstants.defaultHasBackgroundImage
         
         selectedTheme = Constants.MagneticaConstants.defaultTheme
         wordPosition = Constants.MagneticaConstants.defaultWordPosition
@@ -48,8 +50,6 @@ class MagneticaModelUserDefaults: MagneticaModel {
         defaults.set(selectedTheme, forKey: Constants.MagneticaConstants.kthemeKey)
         defaults.set(wordPosition, forKey: Constants.MagneticaConstants.kwordsKey)
         
-        // Don't do on iOS 8+
-        // defaults.synchronize()
     }
     
     func saveSettings() {
@@ -57,13 +57,10 @@ class MagneticaModelUserDefaults: MagneticaModel {
         defaults.set(fontStyle, forKey: Constants.MagneticaConstants.kfontStyleKey)
         defaults.set(fontSize, forKey: Constants.MagneticaConstants.kfontSizeKey)
         
-        defaults.set(backgroundImage, forKey: Constants.MagneticaConstants.kbackgroundImageKey)
-        
-        print(backgroundColor)
+        defaults.setImage(image: backgroundImage, forKey: Constants.MagneticaConstants.kbackgroundImageKey)
         defaults.setColor(color: backgroundColor, forKey: Constants.MagneticaConstants.kbackgroundColorKey)
+        defaults.set(hasBackgroundImage, forKey: Constants.MagneticaConstants.khasBackgroundImageKey)
         
-        // Don't do on iOS 8+
-        // defaults.synchronize()
     }
     
     func load() {
@@ -94,10 +91,16 @@ class MagneticaModelUserDefaults: MagneticaModel {
             self.backgroundColor = Constants.MagneticaConstants.defaultBackgroundColor
         }
         
-        if let backgroundImage = defaults.value(forKey: Constants.MagneticaConstants.kbackgroundImageKey) as? UIImage {
+        if let backgroundImage = defaults.imageForKey(key: Constants.MagneticaConstants.kbackgroundImageKey) {
             self.backgroundImage = backgroundImage
         } else {
-            self.backgroundImage = Constants.MagneticaConstants.defaultBackgroundImage
+            self.backgroundImage = UIImage(color: .white)
+        }
+        
+        if let hasBackgroundImage = defaults.value(forKey: Constants.MagneticaConstants.khasBackgroundImageKey) {
+            self.hasBackgroundImage = hasBackgroundImage as! Bool
+        } else {
+            self.hasBackgroundImage = Constants.MagneticaConstants.defaultHasBackgroundImage
         }
         
         // SCREEN+WORDS
@@ -117,7 +120,22 @@ class MagneticaModelUserDefaults: MagneticaModel {
 
 }
 
-// I got this extension from here: https://www.bobthedeveloper.io/blog/store-uicolor-with-userdefaults-in-swift
+
+public extension UIImage {
+    public convenience init?(color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) {
+        let rect = CGRect(origin: .zero, size: size)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
+        color.setFill()
+        UIRectFill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        guard let cgImage = image?.cgImage else { return nil }
+        self.init(cgImage: cgImage)
+    }
+}
+
+// I got the extension from here: https://www.bobthedeveloper.io/blog/store-uicolor-with-userdefaults-in-swift
 extension UserDefaults {
     func colorForKey(key: String) -> UIColor? {
         var color: UIColor?

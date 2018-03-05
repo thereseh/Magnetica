@@ -67,7 +67,14 @@ class ViewController: UIViewController {
     }
     
     func placeWords() {
-        view.backgroundColor = magneticaVC.backgroundColor
+        
+        if magneticaVC.hasBackgroundImage {
+            let image: UIImage? = magneticaVC.backgroundImage
+            (self.view as! UIImageView).contentMode = .center
+            (self.view as! UIImageView).image = image
+        } else {
+            view.backgroundColor = magneticaVC.backgroundColor
+        }
         
         let wordsInSelectedTheme:[WordModel] = wordManager.wordBank[Constants.MagneticaConstants.defaultTheme]!
         let margin: CGFloat = 40
@@ -147,9 +154,11 @@ class ViewController: UIViewController {
     // MARK: - Notifications -
     @objc func updateBackground(n:Notification) {
         var data = n.userInfo!
+        
         let image:UIImage = data[UIImagePickerControllerEditedImage] as! UIImage
         
         magneticaVC.backgroundImage = image
+
         (self.view as! UIImageView).contentMode = .center
         (self.view as! UIImageView).image = backgroundImage
     }
@@ -196,7 +205,6 @@ class ViewController: UIViewController {
         }
         
         if segue.identifier == "showSettingsSegue" {
-            print("click settings")
         }
     }
     

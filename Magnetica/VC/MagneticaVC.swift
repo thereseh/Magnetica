@@ -38,6 +38,15 @@ class MagneticaVC {
         }
     }
     
+    var hasBackgroundImage: Bool {
+        get {
+            return magneticaModel.hasBackgroundImage
+        }
+        set {
+            magneticaModel.hasBackgroundImage = newValue
+        }
+    }
+    
     var backgroundColor: UIColor {
         get {
             return magneticaModel.backgroundColor
