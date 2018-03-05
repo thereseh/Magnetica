@@ -8,9 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		7C56CBCA203B5CB400DF330C /* WordBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C56CBC9203B5CB400DF330C /* WordBank.swift */; };
-		7C56CBCC203B76DE00DF330C /* MagneticaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C56CBCB203B76DE00DF330C /* MagneticaVC.swift */; };
+		7C56CBCC203B76DE00DF330C /* MagneticaModelUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C56CBCB203B76DE00DF330C /* MagneticaModelUserDefaults.swift */; };
 		7C901366204C902D00F4791D /* MagneticaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901365204C902D00F4791D /* MagneticaModel.swift */; };
 		7C901368204C914D00F4791D /* WordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901367204C914D00F4791D /* WordModel.swift */; };
+		7C90136C204CC18400F4791D /* MagneticaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C90136B204CC18400F4791D /* MagneticaVC.swift */; };
 		7CA84537204C860200ED1AD3 /* MagneticaConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA84536204C860200ED1AD3 /* MagneticaConstants.swift */; };
 		7CE24934204B5EC2009457CB /* SettingsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE24933204B5EC2009457CB /* SettingsTableVC.swift */; };
 		AE38BC2E203A667500D41655 /* WordsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE38BC2D203A667500D41655 /* WordsTableVC.swift */; };
@@ -23,9 +24,10 @@
 
 /* Begin PBXFileReference section */
 		7C56CBC9203B5CB400DF330C /* WordBank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordBank.swift; sourceTree = "<group>"; };
-		7C56CBCB203B76DE00DF330C /* MagneticaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticaVC.swift; sourceTree = "<group>"; };
+		7C56CBCB203B76DE00DF330C /* MagneticaModelUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticaModelUserDefaults.swift; sourceTree = "<group>"; };
 		7C901365204C902D00F4791D /* MagneticaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticaModel.swift; sourceTree = "<group>"; };
 		7C901367204C914D00F4791D /* WordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordModel.swift; sourceTree = "<group>"; };
+		7C90136B204CC18400F4791D /* MagneticaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticaVC.swift; sourceTree = "<group>"; };
 		7CA84536204C860200ED1AD3 /* MagneticaConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticaConstants.swift; sourceTree = "<group>"; };
 		7CE24933204B5EC2009457CB /* SettingsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableVC.swift; sourceTree = "<group>"; };
 		AE38BC2D203A667500D41655 /* WordsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsTableVC.swift; sourceTree = "<group>"; };
@@ -60,9 +62,9 @@
 		7CE24931204B5166009457CB /* VC */ = {
 			isa = PBXGroup;
 			children = (
-				7C56CBCB203B76DE00DF330C /* MagneticaVC.swift */,
 				7CE24933204B5EC2009457CB /* SettingsTableVC.swift */,
 				AE38BC2D203A667500D41655 /* WordsTableVC.swift */,
+				7C90136B204CC18400F4791D /* MagneticaVC.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -72,6 +74,7 @@
 			children = (
 				7C56CBC9203B5CB400DF330C /* WordBank.swift */,
 				7C901365204C902D00F4791D /* MagneticaModel.swift */,
+				7C56CBCB203B76DE00DF330C /* MagneticaModelUserDefaults.swift */,
 				7C901367204C914D00F4791D /* WordModel.swift */,
 			);
 			path = Model;
@@ -98,8 +101,8 @@
 			children = (
 				AEDBD63D2028AEAA0068ADB8 /* AppDelegate.swift */,
 				AEDBD63F2028AEAA0068ADB8 /* ViewController.swift */,
-				7CE24932204B51F1009457CB /* Model */,
 				7CE24931204B5166009457CB /* VC */,
+				7CE24932204B51F1009457CB /* Model */,
 				7CA84538204C8FE700ED1AD3 /* Utilities */,
 				AEDBD6412028AEAA0068ADB8 /* Main.storyboard */,
 				AEDBD6442028AEAA0068ADB8 /* Assets.xcassets */,
@@ -188,7 +191,8 @@
 				AEDBD6402028AEAA0068ADB8 /* ViewController.swift in Sources */,
 				AEDBD63E2028AEAA0068ADB8 /* AppDelegate.swift in Sources */,
 				7CE24934204B5EC2009457CB /* SettingsTableVC.swift in Sources */,
-				7C56CBCC203B76DE00DF330C /* MagneticaVC.swift in Sources */,
+				7C56CBCC203B76DE00DF330C /* MagneticaModelUserDefaults.swift in Sources */,
+				7C90136C204CC18400F4791D /* MagneticaVC.swift in Sources */,
 				7CA84537204C860200ED1AD3 /* MagneticaConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

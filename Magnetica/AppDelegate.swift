@@ -18,10 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let viewController = window?.rootViewController as? ViewController {
             
-           // let magneticaModel = MagneticaModel()
+           let magneticaVC = MagneticaVC()
             
             // Property dependency injection
-           // viewController.magneticaModel = magneticaModel
+           viewController.magneticaVC = magneticaVC
             
         }
         

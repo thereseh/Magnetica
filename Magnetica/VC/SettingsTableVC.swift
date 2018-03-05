@@ -21,7 +21,6 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
                       (name: "Browm", value: UIColor.brown), (name: "Cyan", value: UIColor.cyan),
                       (name: "Dark Gray", value: UIColor.darkGray), (name: "Light Gray", value: UIColor.lightGray)]
     
-    var magneticaVC: MagneticaVC!
     
     // outlets
     @IBOutlet weak var fontStylePicker: UIPickerView!

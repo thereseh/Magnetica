@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     var prevLabelWidth:CGFloat = 0
     
     var wordManager: WordBank!
-    //var magneticaModel: MagneticaModel!
+    var magneticaVC: MagneticaVC!
     
     var backgroundImage:UIImage?
     var backgroundColor:UIColor?
@@ -39,14 +39,16 @@ class ViewController: UIViewController {
         
         wordManager = WordBank()
         
-        backgroundColor = Constants.MagneticaConstants.defaultBackgroundColor
-        fontStyle = Constants.MagneticaConstants.defaultFontStyle
+        assert(magneticaVC != nil, "MagneticaVC must be set before using property via dependency injection")
         
-        if isPad {
-            fontSize = Constants.MagneticaConstants.defaultFontSizeiPad
-        } else {
-            fontSize = Constants.MagneticaConstants.defaultFontSizeiPhone
-        }
+//        backgroundColor = Constants.MagneticaConstants.defaultBackgroundColor
+//        fontStyle = Constants.MagneticaConstants.defaultFontStyle
+//
+//        if isPad {
+//            fontSize = Constants.MagneticaConstants.defaultFontSizeiPad
+//        } else {
+//            fontSize = Constants.MagneticaConstants.defaultFontSizeiPhone
+//        }
         
         let nCenter = NotificationCenter.default
         nCenter.addObserver(self, selector: #selector(updateScreen), name: updateScreenNotification, object: nil)
@@ -55,8 +57,6 @@ class ViewController: UIViewController {
         nCenter.addObserver(self, selector: #selector(updateFontSize), name: fontSizeChangedNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(updateBackgroundColor), name: backgroundColorChangedNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(updateTheme), name: myWordThemeChangedNotification, object: nil)
-        
-        currentTheme = wordManager.wordBank[Constants.MagneticaConstants.defaultTheme]!
         
         placeWords()
     }
@@ -67,24 +67,24 @@ class ViewController: UIViewController {
     }
     
     func placeWords() {
-        view.backgroundColor = backgroundColor
+        view.backgroundColor = magneticaVC.backgroundColor
         
+        let wordsInSelectedTheme:[WordModel] = wordManager.wordBank[Constants.MagneticaConstants.defaultTheme]!
         let margin: CGFloat = 40
         let currentLabelwidth: CGFloat = view.frame.width - margin
 
         var count: CGFloat = 0
         var row: CGFloat = 0
         
-        for word in currentTheme {
+        for word in wordsInSelectedTheme {
             let currentLabel = UILabel()
             currentLabel.backgroundColor = UIColor.white
             currentLabel.text = word.word
-            currentLabel.font = UIFont(name: fontStyle.lowercased(), size: CGFloat(fontSize))
-            print(currentLabel.font)
+            currentLabel.font = UIFont(name: magneticaVC.fontStyle, size: CGFloat(magneticaVC.fontSize))
             currentLabel.sizeToFit()
             
             // resize the labels
-            currentLabel.frame.size.height = CGFloat(fontSize + 10)
+            currentLabel.frame.size.height = CGFloat(magneticaVC.fontSize + 10)
             currentLabel.frame.size.width = currentLabel.frame.size.width + 15
             
             var currLabelXPos: CGFloat = 0
@@ -149,7 +149,7 @@ class ViewController: UIViewController {
         var data = n.userInfo!
         let image:UIImage = data[UIImagePickerControllerEditedImage] as! UIImage
         
-        backgroundImage = image
+        magneticaVC.backgroundImage = image
         (self.view as! UIImageView).contentMode = .center
         (self.view as! UIImageView).image = backgroundImage
     }
@@ -157,14 +157,14 @@ class ViewController: UIViewController {
     @objc func updateFontStyle(n:Notification) {
         let data = n.userInfo!
         
-        fontStyle = data["Style"] as! String
+        magneticaVC.fontStyle = data["Style"] as! String
         
         print("Fontstyle: \(fontStyle)")
     }
     
     @objc func updateFontSize(n:Notification) {
         let data = n.userInfo!
-        fontSize = data["Size"] as! Int
+        magneticaVC.fontSize = data["Size"] as! Int
         
         print("Size: \(fontSize)")
     }
@@ -172,17 +172,18 @@ class ViewController: UIViewController {
     @objc func updateBackgroundColor(n:Notification) {
         let data = n.userInfo!
         
-        backgroundColor = (data["Color"] as! UIColor)
+        magneticaVC.backgroundColor = (data["Color"] as! UIColor)
     }
     
     @objc func updateTheme(n:Notification) {
         let data = n.userInfo!
-        currentTheme = data["Theme"] as! [WordModel]
+        magneticaVC.selectedTheme = (data["Theme"] as! String)
         
         updateScreen()
     }
     
     @objc func updateScreen() {
+        magneticaVC.saveSettings()
         clearScreen()
         placeWords()
     }

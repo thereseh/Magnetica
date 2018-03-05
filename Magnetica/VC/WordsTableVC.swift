@@ -55,7 +55,7 @@ class WordsTableVC: UITableViewController {
     @IBAction func doneTapped(sender: AnyObject) {
         let nCenter = NotificationCenter.default
         
-        let data = ["Theme": wordManager.wordBank[selectedWordTheme]!]
+        let data = ["Theme": selectedWordTheme]
 
         nCenter.post(name: myWordThemeChangedNotification, object: self, userInfo: data)
 

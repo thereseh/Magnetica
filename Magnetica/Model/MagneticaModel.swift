@@ -13,18 +13,15 @@ protocol MagneticaModel {
     var fontSize: Int { get set }
     
     var backgroundImage: UIImage? { get set }
-    var backgroundColor: UIColor? { get set }
+    var backgroundColor: UIColor { get set }
     
-    var selectedTheme: String? { get set }
-    var wordPosition: [String]? { get set }
+    var selectedTheme: String { get set }
+    var wordPosition: [WordModel]? { get set }
     
     func save()
+    func saveSettings()
     func load()
 }
 
-// Objective-C naming convention for constants (start with k)
-//let kfontStyleKey = "kfontStyleKey"
-//let kfontSizeKey = "kfontSizeKey"
-//let kfontSizeKey = "kfontSizeKey"
-//let kfontSizeKey = "kfontSizeKey"
+
 
