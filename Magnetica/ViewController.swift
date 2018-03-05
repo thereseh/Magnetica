@@ -68,7 +68,7 @@ class ViewController: UIViewController {
     }
     
     func placeWords() {
-        print(#function)
+
         if magneticaVC.hasBackgroundImage {
             magneticaVC.backgroundColor = UIColor.clear
             let image: UIImage? = magneticaVC.backgroundImage
@@ -162,27 +162,19 @@ class ViewController: UIViewController {
         
         labelHolderView.frame = CGRect(x: 0, y: 32, width: view.frame.width, height: (view.frame.height / 4.0))
         
+        // add dropshadow
+        labelHolderView.layer.shadowColor = UIColor.black.cgColor
+        labelHolderView.layer.shadowRadius = 1.5
+        labelHolderView.layer.shadowOpacity = 0.8
+        labelHolderView.layer.shadowOffset = CGSize(width:1, height: 2)
+        labelHolderView.layer.masksToBounds = false
+        
         let xPos = view.frame.width - moreLabelsButton.frame.width
         let yPos = (view.frame.height / 4.0) + 32 + moreLabelsButton.frame.height
         
         // Set position of buttons
         moreLabelsButton.center = CGPoint(x: xPos, y: yPos)
         hideLabelHolderView.center = CGPoint(x: xPos - hideLabelHolderView.frame.width * 2, y: yPos)
-        hideLabelHolderView.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-        
-        // Style them
-        moreLabelsButton.backgroundColor = UIColor.white
-        hideLabelHolderView.backgroundColor = UIColor.white
-        
-        moreLabelsButton.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
-        moreLabelsButton.layer.shadowOffset = CGSize(width: 1, height: 1)
-        moreLabelsButton.layer.shadowOpacity = 1.0
-        moreLabelsButton.layer.shadowRadius = 0.5
-        
-        hideLabelHolderView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
-        hideLabelHolderView.layer.shadowOffset = CGSize(width: -1, height: 1)
-        hideLabelHolderView.layer.shadowOpacity = 1.0
-        hideLabelHolderView.layer.shadowRadius = 0.5
         
     }
     
@@ -267,17 +259,37 @@ class ViewController: UIViewController {
     }
     
     @IBAction func hideAndShowLabelView(_ sender: Any) {
+        // Animations to hide and display the view containing the words
+        // also toggles the image used in the show/hide button
+        
         if labelViewIsHidden {
             labelViewIsHidden = false
             UIView.animate(withDuration: 0.8, animations: {
+                
                 self.labelHolderView.frame.size.height = (super.view.frame.height / 4.0)
+                self.moreLabelsButton.center.y = (super.view.frame.height / 4.0) + 32 + self.moreLabelsButton.frame.height
+                self.hideLabelHolderView.center.y = (super.view.frame.height / 4.0) + 32 + self.moreLabelsButton.frame.height
+                
+            }, completion: {finished in
+                
+                self.hideLabelHolderView.setImage(UIImage(named: "hideButton"), for: .normal)
+                self.placeWords()
+                self.moreLabelsButton.isHidden = false
+                
             })
-            placeWords()
+            
         } else {
             clearScreen()
             labelViewIsHidden = true
             UIView.animate(withDuration: 0.8, animations: {
+                
                 self.labelHolderView.frame.size.height = 20
+                self.moreLabelsButton.center.y = 20 + 32 + self.moreLabelsButton.frame.height
+                self.hideLabelHolderView.center.y = 20 + 32 + self.moreLabelsButton.frame.height
+                self.moreLabelsButton.isHidden = true
+                
+            }, completion: {finished in
+                self.hideLabelHolderView.setImage(UIImage(named: "showButton"), for: .normal)
             })
         }
     }
