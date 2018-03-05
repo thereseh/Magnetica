@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     var previousLabel = [CGFloat]()
     var prevLabelXPos:CGFloat = 0
     var prevLabelWidth:CGFloat = 0
+    var prevLabelYPos:CGFloat = 0
     
     var wordManager: WordBank!
     var magneticaVC: MagneticaVC!
@@ -31,8 +32,15 @@ class ViewController: UIViewController {
     
     var fontStyle: String = ""
     var fontSize: Int = 0
+    var labelViewIsHidden = false
     
     var currentTheme: [WordModel] = []
+    
+    // Outlets
+    @IBOutlet weak var labelHolderView: UIView!
+    @IBOutlet weak var moreLabelsButton: UIButton!
+    @IBOutlet weak var hideLabelHolderView: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,14 +49,6 @@ class ViewController: UIViewController {
         
         assert(magneticaVC != nil, "MagneticaVC must be set before using property via dependency injection")
         
-//        backgroundColor = Constants.MagneticaConstants.defaultBackgroundColor
-//        fontStyle = Constants.MagneticaConstants.defaultFontStyle
-//
-//        if isPad {
-//            fontSize = Constants.MagneticaConstants.defaultFontSizeiPad
-//        } else {
-//            fontSize = Constants.MagneticaConstants.defaultFontSizeiPhone
-//        }
         
         let nCenter = NotificationCenter.default
         nCenter.addObserver(self, selector: #selector(updateScreen), name: updateScreenNotification, object: nil)
@@ -58,6 +58,7 @@ class ViewController: UIViewController {
         nCenter.addObserver(self, selector: #selector(updateBackgroundColor), name: backgroundColorChangedNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(updateTheme), name: myWordThemeChangedNotification, object: nil)
         
+        setLabelViewSize()
         placeWords()
     }
     
@@ -67,35 +68,42 @@ class ViewController: UIViewController {
     }
     
     func placeWords() {
-        
+        print(#function)
         if magneticaVC.hasBackgroundImage {
+            magneticaVC.backgroundColor = UIColor.clear
             let image: UIImage? = magneticaVC.backgroundImage
-            (self.view as! UIImageView).contentMode = .center
+            (self.view as! UIImageView).contentMode = .scaleAspectFill
             (self.view as! UIImageView).image = image
         } else {
             view.backgroundColor = magneticaVC.backgroundColor
         }
         
+        if magneticaVC.backgroundColor == UIColor.lightGray  {
+           labelHolderView.backgroundColor = UIColor.darkGray
+        } else {
+           labelHolderView.backgroundColor = UIColor.lightGray
+        }
+        
         let wordsInSelectedTheme:[WordModel] = wordManager.wordBank[Constants.MagneticaConstants.defaultTheme]!
         let margin: CGFloat = 40
-        let currentLabelwidth: CGFloat = view.frame.width - margin
+        let currentLabelwidth: CGFloat = labelHolderView.frame.width - margin
 
         var count: CGFloat = 0
         var row: CGFloat = 0
         
-        for word in wordsInSelectedTheme {
+        var currLabelXPos: CGFloat = 0
+        var currLabelYPos: CGFloat = 0
+        
+        while prevLabelYPos + 10 < labelHolderView.frame.height - margin/2 {
             let currentLabel = UILabel()
             currentLabel.backgroundColor = UIColor.white
-            currentLabel.text = word.word
+            currentLabel.text = wordsInSelectedTheme.randomItem()?.word
             currentLabel.font = UIFont(name: magneticaVC.fontStyle, size: CGFloat(magneticaVC.fontSize))
             currentLabel.sizeToFit()
             
             // resize the labels
             currentLabel.frame.size.height = CGFloat(magneticaVC.fontSize + 10)
             currentLabel.frame.size.width = currentLabel.frame.size.width + 15
-            
-            var currLabelXPos: CGFloat = 0
-            var currLabelYPos: CGFloat = 0
             
             if count == 0 {
                 
@@ -108,7 +116,7 @@ class ViewController: UIViewController {
                 let nextSize: CGFloat = ((prevLabelXPos + (prevLabelWidth / 2)  + (currentLabel.frame.size.width / 2))) + 15
                 
                 // if it's more than width, then wrap around again
-                if nextSize > CGFloat(currentLabelwidth) {
+                if nextSize + 10 > CGFloat(currentLabelwidth) {
                     
                     currLabelXPos = margin + (currentLabel.frame.size.width / 2)
                     row = row + 1.0
@@ -116,18 +124,24 @@ class ViewController: UIViewController {
                 } else {
                     currLabelXPos = nextSize
                 }
-
+                
                 currLabelYPos = margin + 10 + (currentLabel.frame.size.height * row) + (15 * row)
-        
+                
+                // just one extra catch
+                if currLabelYPos + 10 > labelHolderView.frame.height - margin/2 {
+                    break
+                }
+                
             }
             
             // add current word into array for next word to use
             prevLabelXPos = currLabelXPos
             prevLabelWidth = currentLabel.frame.size.width
-
+            prevLabelYPos = currLabelYPos
+            
             currentLabel.center = CGPoint( x:currLabelXPos, y:currLabelYPos )
             currentLabel.textAlignment = .center
-            view.addSubview(currentLabel)
+            labelHolderView.addSubview(currentLabel)
             
             // add dropshadow
             currentLabel.layer.shadowColor = UIColor.black.cgColor
@@ -141,10 +155,39 @@ class ViewController: UIViewController {
             currentLabel.addGestureRecognizer(panGesture)
             count += 1
         }
+        
+    }
+    
+    func setLabelViewSize() {
+        
+        labelHolderView.frame = CGRect(x: 0, y: 32, width: view.frame.width, height: (view.frame.height / 4.0))
+        
+        let xPos = view.frame.width - moreLabelsButton.frame.width
+        let yPos = (view.frame.height / 4.0) + 32 + moreLabelsButton.frame.height
+        
+        // Set position of buttons
+        moreLabelsButton.center = CGPoint(x: xPos, y: yPos)
+        hideLabelHolderView.center = CGPoint(x: xPos - hideLabelHolderView.frame.width * 2, y: yPos)
+        hideLabelHolderView.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+        
+        // Style them
+        moreLabelsButton.backgroundColor = UIColor.white
+        hideLabelHolderView.backgroundColor = UIColor.white
+        
+        moreLabelsButton.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+        moreLabelsButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+        moreLabelsButton.layer.shadowOpacity = 1.0
+        moreLabelsButton.layer.shadowRadius = 0.5
+        
+        hideLabelHolderView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+        hideLabelHolderView.layer.shadowOffset = CGSize(width: -1, height: 1)
+        hideLabelHolderView.layer.shadowOpacity = 1.0
+        hideLabelHolderView.layer.shadowRadius = 0.5
+        
     }
     
     func clearScreen() {
-        for v in view.subviews{
+        for v in labelHolderView.subviews{
             if v is UILabel{
                 v.removeFromSuperview()
             }
@@ -158,10 +201,11 @@ class ViewController: UIViewController {
         let image:UIImage = data[UIImagePickerControllerEditedImage] as! UIImage
         
         magneticaVC.backgroundImage = image
-
-        (self.view as! UIImageView).contentMode = .center
-        (self.view as! UIImageView).image = backgroundImage
+        magneticaVC.hasBackgroundImage = true
+        
+        updateScreen()
     }
+    
     
     @objc func updateFontStyle(n:Notification) {
         let data = n.userInfo!
@@ -215,5 +259,36 @@ class ViewController: UIViewController {
         let position = panGeture.location(in: view)
         label.center = position
     }
-
+    
+    // IBActions
+    @IBAction func getMoreLabels(_ sender: UIButton) {
+        clearScreen()
+        placeWords()
+    }
+    
+    @IBAction func hideAndShowLabelView(_ sender: Any) {
+        if labelViewIsHidden {
+            labelViewIsHidden = false
+            UIView.animate(withDuration: 0.8, animations: {
+                self.labelHolderView.frame.size.height = (super.view.frame.height / 4.0)
+            })
+            placeWords()
+        } else {
+            clearScreen()
+            labelViewIsHidden = true
+            UIView.animate(withDuration: 0.8, animations: {
+                self.labelHolderView.frame.size.height = 20
+            })
+        }
+    }
+    
 }
+
+extension Array {
+    func randomItem() -> Element? {
+        if isEmpty { return nil }
+        let index = Int(arc4random_uniform(UInt32(self.count)))
+        return self[index]
+    }
+}
+

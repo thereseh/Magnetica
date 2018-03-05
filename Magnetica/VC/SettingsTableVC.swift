@@ -19,7 +19,10 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
     let backgroundColors = [(name: "Black", value: UIColor.black), (name: "Blue", value: UIColor.blue),
                       (name: "Red", value: UIColor.red), (name: "Green", value: UIColor.green),
                       (name: "Browm", value: UIColor.brown), (name: "Cyan", value: UIColor.cyan),
-                      (name: "Dark Gray", value: UIColor.darkGray), (name: "Light Gray", value: UIColor.lightGray)]
+                      (name: "Dark Gray", value: UIColor.darkGray), (name: "Light Gray", value: UIColor.lightGray),
+                      (name: "White", value: UIColor.white), (name: "Orange", value: UIColor.orange),
+                      (name: "Purple", value: UIColor.purple), (name: "Magenta", value: UIColor.magenta),
+                      (name: "Yellow", value: UIColor.yellow)]
     
     
     // outlets
@@ -71,18 +74,22 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
 
             return fontStyleLabel!
         } else {
-            var fontColorLabel: UILabel? = (view as? UILabel)
+            var backgroundColorLabel: UILabel? = (view as? UILabel)
             
-            if fontColorLabel == nil {
-                fontColorLabel = UILabel()
-                fontColorLabel?.font = UIFont(name: Constants.MagneticaConstants.defaultFontStyle, size: 16)
-                fontColorLabel?.textAlignment = .center
+            if backgroundColorLabel == nil {
+                backgroundColorLabel = UILabel()
+                backgroundColorLabel?.font = UIFont(name: Constants.MagneticaConstants.defaultFontStyle, size: 16)
+                backgroundColorLabel?.textAlignment = .center
             }
             
-            fontColorLabel?.text = backgroundColors[row].name
-            fontColorLabel?.textColor = backgroundColors[row].value
+            backgroundColorLabel?.text = backgroundColors[row].name
+            if backgroundColors[row].name == "White" {
+                backgroundColorLabel?.textColor = UIColor.black
+            } else {
+                backgroundColorLabel?.textColor = backgroundColors[row].value
+            }
             
-            return fontColorLabel!
+            return backgroundColorLabel!
         }
     }
     
