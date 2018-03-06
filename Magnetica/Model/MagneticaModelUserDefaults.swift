@@ -9,7 +9,7 @@
 import UIKit
 
 
-class MagneticaModelUserDefaults: MagneticaModel {
+class MagneticaModelUserDefaults: MagneticaModel {    
     let defaults: UserDefaults
     
     var fontSize: Int
@@ -17,7 +17,7 @@ class MagneticaModelUserDefaults: MagneticaModel {
     var backgroundColor: UIColor
     var backgroundImage: UIImage?
     var selectedTheme: String
-    var wordPosition: [UILabel]?
+    var wordPosition: [UILabel]
     var hasBackgroundImage: Bool
     
     // Initializer Dependency Injection with a default value
@@ -48,12 +48,11 @@ class MagneticaModelUserDefaults: MagneticaModel {
     
     func save() {
         defaults.set(selectedTheme, forKey: Constants.MagneticaConstants.kthemeKey)
-        defaults.set(wordPosition, forKey: Constants.MagneticaConstants.kwordsKey)
+        defaults.setUILabels(labelArray: wordPosition, forKey: Constants.MagneticaConstants.kwordsKey)
         
     }
     
     func saveSettings() {
-        print(#function)
         defaults.set(fontStyle, forKey: Constants.MagneticaConstants.kfontStyleKey)
         defaults.set(fontSize, forKey: Constants.MagneticaConstants.kfontSizeKey)
         
@@ -110,7 +109,7 @@ class MagneticaModelUserDefaults: MagneticaModel {
             self.selectedTheme = Constants.MagneticaConstants.defaultTheme
         }
         
-        if let wordPosition = defaults.value(forKey: Constants.MagneticaConstants.kwordsKey) as? [UILabel] {
+        if let wordPosition = defaults.UILabelsForKey(key: Constants.MagneticaConstants.kwordsKey) {
             self.wordPosition = wordPosition
         } else {
             self.wordPosition = Constants.MagneticaConstants.defaultWordPosition
@@ -167,6 +166,22 @@ extension UserDefaults {
             imageData = NSKeyedArchiver.archivedData(withRootObject: image) as NSData?
         }
         set(imageData, forKey: key)// UserDefault Built-in Method into Any?
+    }
+    
+    func setUILabels(labelArray: [UILabel]?, forKey key: String) {
+        var arrayData: NSData?
+        if let labelArray = labelArray {
+            arrayData = NSKeyedArchiver.archivedData(withRootObject: labelArray ) as NSData?
+        }
+        set(arrayData, forKey: key)// UserDefault Built-in Method into Any?
+    }
+    
+    func UILabelsForKey(key: String) -> [UILabel]? {
+        var labelArray: [UILabel]?
+        if let arrayData = data(forKey: key) {
+            labelArray = NSKeyedUnarchiver.unarchiveObject(with: arrayData) as? [UILabel]
+        }
+        return labelArray
     }
 }
 

@@ -16,7 +16,7 @@ protocol MagneticaModel {
     var backgroundColor: UIColor { get set }
     
     var selectedTheme: String { get set }
-    var wordPosition: [UILabel]? { get set }
+    var wordPosition: [UILabel] { get set }
     
     var hasBackgroundImage: Bool { get set }
     

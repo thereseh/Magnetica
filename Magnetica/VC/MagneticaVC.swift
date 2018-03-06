@@ -65,9 +65,9 @@ class MagneticaVC {
         }
     }
     
-    var wordPosition: [WordModel] {
+    var wordPosition: [UILabel] {
         get {
-            return magneticaModel.wordPosition!
+            return magneticaModel.wordPosition
         }
         set {
             magneticaModel.wordPosition = newValue
@@ -82,6 +82,10 @@ class MagneticaVC {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func save() {
+        magneticaModel.save()
     }
     
     func saveSettings() {

@@ -17,7 +17,7 @@ struct Constants {
         static let defaultFontSizeiPad: Int = 25
         static let defaultBackgroundColor: UIColor = UIColor.lightGray
         static let defaultTheme: String = "Harry Potter"
-        static let defaultWordPosition: [UILabel]? = nil
+        static let defaultWordPosition: [UILabel] = []
         static let defaultHasBackgroundImage: Bool = false
         
         static let kfontStyleKey: String = "kfontStyleKey"

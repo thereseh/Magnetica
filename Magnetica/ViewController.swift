@@ -39,6 +39,8 @@ class ViewController: UIViewController {
     var currentTheme: [WordModel] = []
     var draggedLabels: [UILabel] = []
     
+    var saveTimer: Timer!
+    
     // Outlets
     @IBOutlet weak var labelHolderView: UIView!
     @IBOutlet weak var moreLabelsButton: UIButton!
@@ -62,11 +64,16 @@ class ViewController: UIViewController {
         nCenter.addObserver(self, selector: #selector(updateTheme), name: myWordThemeChangedNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(removeBackgroundImage), name: removeBackgroundImageNotification, object: nil)
         
+        saveTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(timedSave), userInfo: nil, repeats: true)
         
         setLabelViewSize()
         placeWords()
+        drawLabelsOnView()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        saveTimer.invalidate()
+    }
     //MARK: - Cleanup -
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -164,7 +171,7 @@ class ViewController: UIViewController {
     }
     
     func drawLabelsOnView() {
-        for label in draggedLabels {
+        for label in magneticaVC.wordPosition {
             view.addSubview(label)
         }
     }
@@ -222,7 +229,7 @@ class ViewController: UIViewController {
         copyLabel.layer.shadowOpacity = 0.8
         copyLabel.layer.shadowOffset = CGSize(width:1, height: 1)
         copyLabel.layer.masksToBounds = false
-        draggedLabels.append(copyLabel)
+        magneticaVC.wordPosition.append(copyLabel)
         
         view.addSubview(copyLabel)
         
@@ -242,7 +249,9 @@ class ViewController: UIViewController {
         }
     }
     
-    
+    @objc func timedSave() {
+        magneticaVC.save()
+    }
     
     // MARK: - Notifications -
     @objc func updateBackground(n:Notification) {
@@ -261,15 +270,11 @@ class ViewController: UIViewController {
         let data = n.userInfo!
         
         magneticaVC.fontStyle = data["Style"] as! String
-        
-        print("Fontstyle: \(fontStyle)")
     }
     
     @objc func updateFontSize(n:Notification) {
         let data = n.userInfo!
         magneticaVC.fontSize = data["Size"] as! Int
-        
-        print("Size: \(fontSize)")
     }
     
     @objc func updateBackgroundColor(n:Notification) {
@@ -423,7 +428,6 @@ extension UILabel {
 extension UIButton {
     
     func shake() {
-        print("shaking")
         let shake = CABasicAnimation(keyPath: "position")
         shake.duration = 0.1
         shake.repeatCount = 2
