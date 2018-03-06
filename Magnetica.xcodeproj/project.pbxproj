@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C0AA171204E291500FB92B8 /* TakeSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0AA170204E291500FB92B8 /* TakeSnapshot.swift */; };
 		7C56CBCA203B5CB400DF330C /* WordBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C56CBC9203B5CB400DF330C /* WordBank.swift */; };
 		7C56CBCC203B76DE00DF330C /* MagneticaModelUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C56CBCB203B76DE00DF330C /* MagneticaModelUserDefaults.swift */; };
 		7C901366204C902D00F4791D /* MagneticaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C901365204C902D00F4791D /* MagneticaModel.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7C0AA170204E291500FB92B8 /* TakeSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeSnapshot.swift; sourceTree = "<group>"; };
 		7C56CBC9203B5CB400DF330C /* WordBank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordBank.swift; sourceTree = "<group>"; };
 		7C56CBCB203B76DE00DF330C /* MagneticaModelUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticaModelUserDefaults.swift; sourceTree = "<group>"; };
 		7C901365204C902D00F4791D /* MagneticaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticaModel.swift; sourceTree = "<group>"; };
@@ -55,6 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				7CA84536204C860200ED1AD3 /* MagneticaConstants.swift */,
+				7C0AA170204E291500FB92B8 /* TakeSnapshot.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -186,6 +189,7 @@
 			files = (
 				AE38BC2E203A667500D41655 /* WordsTableVC.swift in Sources */,
 				7C901368204C914D00F4791D /* WordModel.swift in Sources */,
+				7C0AA171204E291500FB92B8 /* TakeSnapshot.swift in Sources */,
 				7C901366204C902D00F4791D /* MagneticaModel.swift in Sources */,
 				7C56CBCA203B5CB400DF330C /* WordBank.swift in Sources */,
 				AEDBD6402028AEAA0068ADB8 /* ViewController.swift in Sources */,

@@ -381,7 +381,27 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func share(_ sender: AnyObject) {
+        let image = self.view.takeSnapshot()
+        let textToShare = "Look at this poem that I made, just for you!\n"
+        let igmWebsite = NSURL(string: "http://igm.rit.edu/")
+        let objectsToShare:[AnyObject] = [textToShare as AnyObject, igmWebsite!, image!]
+        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+        activityVC.excludedActivityTypes = [UIActivityType.print]
+        
+        activityVC.popoverPresentationController?.sourceView = self.view
+        
+        let popoverMenuViewController = activityVC.popoverPresentationController
+        popoverMenuViewController?.permittedArrowDirections = .any
+        popoverMenuViewController?.barButtonItem = sender as? UIBarButtonItem
+        self.present(activityVC, animated: true, completion: nil)
+        
+    }
+    
 }
+
+
+
 
 extension Array {
     func randomItem() -> Element? {
