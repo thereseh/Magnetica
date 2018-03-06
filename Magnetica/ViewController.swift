@@ -47,7 +47,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var hideLabelHolderView: UIButton!
     @IBOutlet weak var trashcanButton: UIButton!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -64,7 +63,7 @@ class ViewController: UIViewController {
         nCenter.addObserver(self, selector: #selector(updateTheme), name: myWordThemeChangedNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(removeBackgroundImage), name: removeBackgroundImageNotification, object: nil)
         
-        saveTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(timedSave), userInfo: nil, repeats: true)
+        saveTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(timedSave), userInfo: nil, repeats: true)
         
         setLabelViewSize()
         placeWords()
@@ -74,13 +73,75 @@ class ViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         saveTimer.invalidate()
     }
+    
     //MARK: - Cleanup -
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
+    // IBActions
+    @IBAction func getMoreLabels(_ sender: UIButton) {
+        clearScreen()
+        placeWords()
+    }
+    
+    @IBAction func hideAndShowLabelView(_ sender: Any) {
+        // Animations to hide and display the view containing the words
+        // also toggles the image used in the show/hide button
+        
+        if labelViewIsHidden {
+            labelViewIsHidden = false
+            UIView.animate(withDuration: 0.8, animations: {
+                
+                self.labelHolderView.frame.size.height = (super.view.frame.height / 4.0)
+                self.moreLabelsButton.center.y = (super.view.frame.height / 4.0) + 32 + self.moreLabelsButton.frame.height
+                self.hideLabelHolderView.center.y = (super.view.frame.height / 4.0) + 32 + self.moreLabelsButton.frame.height
+                
+            }, completion: {finished in
+                
+                self.hideLabelHolderView.setBackgroundImage(UIImage(named: "hideButton"), for: .normal)
+                self.placeWords()
+                self.moreLabelsButton.isHidden = false
+                
+            })
+            
+        } else {
+            clearScreen()
+            labelViewIsHidden = true
+            UIView.animate(withDuration: 0.8, animations: {
+                
+                self.labelHolderView.frame.size.height = 20
+                self.moreLabelsButton.center.y = 20 + 32 + self.moreLabelsButton.frame.height
+                self.hideLabelHolderView.center.y = 20 + 32 + self.moreLabelsButton.frame.height
+                self.moreLabelsButton.isHidden = true
+                
+            }, completion: {finished in
+                self.hideLabelHolderView.setBackgroundImage(UIImage(named: "showButton"), for: .normal)
+            })
+        }
+    }
+    
+    @IBAction func share(_ sender: AnyObject) {
+        let image = self.view.takeSnapshot()
+        let textToShare = "Look at this poem that I made, just for you!\n"
+        let igmWebsite = NSURL(string: "http://igm.rit.edu/")
+        let objectsToShare:[AnyObject] = [textToShare as AnyObject, igmWebsite!, image!]
+        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+        activityVC.excludedActivityTypes = [UIActivityType.print]
+        
+        activityVC.popoverPresentationController?.sourceView = self.view
+        
+        let popoverMenuViewController = activityVC.popoverPresentationController
+        popoverMenuViewController?.permittedArrowDirections = .any
+        popoverMenuViewController?.barButtonItem = sender as? UIBarButtonItem
+        self.present(activityVC, animated: true, completion: nil)
+        
+    }
+    
+    
+    //MARK - Draw Action functions -
     func placeWords() {
-
+        
         if magneticaVC.hasBackgroundImage {
             magneticaVC.backgroundColor = UIColor.clear
             let image: UIImage? = magneticaVC.backgroundImage
@@ -91,15 +152,15 @@ class ViewController: UIViewController {
         }
         
         if magneticaVC.backgroundColor == UIColor.lightGray  {
-           labelHolderView.backgroundColor = UIColor.darkGray
+            labelHolderView.backgroundColor = UIColor.darkGray
         } else {
-           labelHolderView.backgroundColor = UIColor.lightGray
+            labelHolderView.backgroundColor = UIColor.lightGray
         }
         
         let wordsInSelectedTheme:[WordModel] = wordManager.wordBank[Constants.MagneticaConstants.defaultTheme]!
         let margin: CGFloat = 40
         let currentLabelwidth: CGFloat = labelHolderView.frame.width - margin
-
+        
         var count: CGFloat = 0
         var row: CGFloat = 0
         
@@ -155,12 +216,7 @@ class ViewController: UIViewController {
             currentLabel.textAlignment = .center
             labelHolderView.addSubview(currentLabel)
             
-            // add dropshadow
-            currentLabel.layer.shadowColor = UIColor.black.cgColor
-            currentLabel.layer.shadowRadius = 1.0
-            currentLabel.layer.shadowOpacity = 0.8
-            currentLabel.layer.shadowOffset = CGSize(width:1, height: 1)
-            currentLabel.layer.masksToBounds = false
+            addDropShadowHelper(label: currentLabel)
             
             currentLabel.isUserInteractionEnabled = true
             let panGesture = UIPanGestureRecognizer(target: self, action: #selector(doPanGesture))
@@ -172,7 +228,46 @@ class ViewController: UIViewController {
     
     func drawLabelsOnView() {
         for label in magneticaVC.wordPosition {
+            addDropShadowHelper(label: label)
             view.addSubview(label)
+        }
+    }
+    
+    
+    //MARK: - Helper methods -
+    func copyDraggedLabel(label: UILabel) {
+        // Takes a label from the label view and creates a copy
+        // to be drawn on the main view
+        let copyLabel = label.createCopy()
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(doPanGesture))
+        
+        // add drag gesture to new copy
+        copyLabel.addGestureRecognizer(panGesture)
+        
+        addDropShadowHelper(label: copyLabel)
+        magneticaVC.wordPosition.append(copyLabel)
+        
+        view.addSubview(copyLabel)
+        
+        // remove original label
+        label.removeFromSuperview()
+    }
+    
+    
+    func addDropShadowHelper(label: AnyObject) {
+        // add dropshadow
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowRadius = 1.0
+        label.layer.shadowOpacity = 0.8
+        label.layer.shadowOffset = CGSize(width:1, height: 1)
+        label.layer.masksToBounds = false
+    }
+    
+    func clearScreen() {
+        for v in labelHolderView.subviews{
+            if v is UILabel{
+                v.removeFromSuperview()
+            }
         }
     }
     
@@ -180,12 +275,8 @@ class ViewController: UIViewController {
         
         labelHolderView.frame = CGRect(x: 0, y: 32, width: view.frame.width, height: (view.frame.height / 4.0))
         
-        // add dropshadow
-        labelHolderView.layer.shadowColor = UIColor.black.cgColor
-        labelHolderView.layer.shadowRadius = 1.5
-        labelHolderView.layer.shadowOpacity = 0.8
-        labelHolderView.layer.shadowOffset = CGSize(width:1, height: 2)
-        labelHolderView.layer.masksToBounds = false
+        addDropShadowHelper(label: labelHolderView)
+        
         
         // make buttons bigger if iPad
         if isPad {
@@ -205,38 +296,6 @@ class ViewController: UIViewController {
         trashcanButton.center = CGPoint(x: 32, y: view.frame.size.height - 44 - trashcanButton.frame.size.height)
         
     }
-    
-    func clearScreen() {
-        for v in labelHolderView.subviews{
-            if v is UILabel{
-                v.removeFromSuperview()
-            }
-        }
-    }
-    
-    // Takes a label from the label view and creates a copy
-    // to be drawn on the main view
-    func copyDraggedLabel(label: UILabel) {
-        let copyLabel = label.createCopy()
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(doPanGesture))
-        
-        // add drag gesture to new copy
-        copyLabel.addGestureRecognizer(panGesture)
-        
-        // add dropshadow
-        copyLabel.layer.shadowColor = UIColor.black.cgColor
-        copyLabel.layer.shadowRadius = 1.0
-        copyLabel.layer.shadowOpacity = 0.8
-        copyLabel.layer.shadowOffset = CGSize(width:1, height: 1)
-        copyLabel.layer.masksToBounds = false
-        magneticaVC.wordPosition.append(copyLabel)
-        
-        view.addSubview(copyLabel)
-        
-        // remove original label
-        label.removeFromSuperview()
-    }
-    
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -308,11 +367,11 @@ class ViewController: UIViewController {
         label.center = position
         
         if panGeture.state == UIGestureRecognizerState.ended {
-        
+            
             if label.superview == labelHolderView {
                 if position.y > labelHolderView.frame.height + label.frame.size.height {
                     copyDraggedLabel(label: label)
-
+                    
                 }
             }
             
@@ -329,83 +388,21 @@ class ViewController: UIViewController {
         
         // when dragging, animate trashcan button
         if label.superview == view {
-                
+            
             if position.x <= trashcanButton.center.x + (trashcanButton.frame.size.width/2) &&
                 position.x >= trashcanButton.center.x - (trashcanButton.frame.size.width/2) &&
                 position.y <= trashcanButton.center.y + (trashcanButton.frame.size.height/2) &&
                 position.y >= trashcanButton.center.y - (trashcanButton.frame.size.height/2) {
-                    trashcanButton.shake()
+                trashcanButton.shake()
             }
-
-               
-        }
-        
-        
-    }
-
-    
-    // IBActions
-    @IBAction func getMoreLabels(_ sender: UIButton) {
-        clearScreen()
-        placeWords()
-    }
-    
-    @IBAction func hideAndShowLabelView(_ sender: Any) {
-        // Animations to hide and display the view containing the words
-        // also toggles the image used in the show/hide button
-        
-        if labelViewIsHidden {
-            labelViewIsHidden = false
-            UIView.animate(withDuration: 0.8, animations: {
-                
-                self.labelHolderView.frame.size.height = (super.view.frame.height / 4.0)
-                self.moreLabelsButton.center.y = (super.view.frame.height / 4.0) + 32 + self.moreLabelsButton.frame.height
-                self.hideLabelHolderView.center.y = (super.view.frame.height / 4.0) + 32 + self.moreLabelsButton.frame.height
-                
-            }, completion: {finished in
-                
-                self.hideLabelHolderView.setBackgroundImage(UIImage(named: "hideButton"), for: .normal)
-                self.placeWords()
-                self.moreLabelsButton.isHidden = false
-                
-            })
             
-        } else {
-            clearScreen()
-            labelViewIsHidden = true
-            UIView.animate(withDuration: 0.8, animations: {
-                
-                self.labelHolderView.frame.size.height = 20
-                self.moreLabelsButton.center.y = 20 + 32 + self.moreLabelsButton.frame.height
-                self.hideLabelHolderView.center.y = 20 + 32 + self.moreLabelsButton.frame.height
-                self.moreLabelsButton.isHidden = true
-                
-            }, completion: {finished in
-                self.hideLabelHolderView.setBackgroundImage(UIImage(named: "showButton"), for: .normal)
-            })
+            
         }
-    }
-    
-    @IBAction func share(_ sender: AnyObject) {
-        let image = self.view.takeSnapshot()
-        let textToShare = "Look at this poem that I made, just for you!\n"
-        let igmWebsite = NSURL(string: "http://igm.rit.edu/")
-        let objectsToShare:[AnyObject] = [textToShare as AnyObject, igmWebsite!, image!]
-        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-        activityVC.excludedActivityTypes = [UIActivityType.print]
         
-        activityVC.popoverPresentationController?.sourceView = self.view
-        
-        let popoverMenuViewController = activityVC.popoverPresentationController
-        popoverMenuViewController?.permittedArrowDirections = .any
-        popoverMenuViewController?.barButtonItem = sender as? UIBarButtonItem
-        self.present(activityVC, animated: true, completion: nil)
         
     }
     
 }
-
-
 
 
 extension Array {
