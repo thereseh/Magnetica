@@ -157,7 +157,7 @@ class ViewController: UIViewController {
             labelHolderView.backgroundColor = UIColor.lightGray
         }
         
-        let wordsInSelectedTheme:[WordModel] = wordManager.wordBank[Constants.MagneticaConstants.defaultTheme]!
+        let wordsInSelectedTheme:[WordModel] = wordManager.wordBank[magneticaVC.selectedTheme]!
         let margin: CGFloat = 40
         let currentLabelwidth: CGFloat = labelHolderView.frame.width - margin
         
@@ -348,7 +348,7 @@ class ViewController: UIViewController {
     @objc func updateTheme(n:Notification) {
         let data = n.userInfo!
         magneticaVC.selectedTheme = (data["Theme"] as! String)
-        
+        print(magneticaVC.selectedTheme)
         updateScreen()
     }
     
