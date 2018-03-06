@@ -229,6 +229,11 @@ class ViewController: UIViewController {
     func drawLabelsOnView() {
         for label in magneticaVC.wordPosition {
             addDropShadowHelper(label: label)
+            
+            let panGesture = UIPanGestureRecognizer(target: self, action: #selector(doPanGesture))
+            
+            // add drag gesture to new copy
+            label.addGestureRecognizer(panGesture)
             view.addSubview(label)
         }
     }

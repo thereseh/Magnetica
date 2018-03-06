@@ -151,7 +151,6 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
     }
     
     
-    
     // IBActions
     @IBAction func cancelTapped(sender: AnyObject) {
         dismiss(animated: true, completion: nil)
