@@ -43,6 +43,7 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
         
         magneticaVC = MagneticaVC()
         fontSizeSlider.value = Float(magneticaVC.fontSize)
+        fontSize = magneticaVC.fontSize
         fontSizeOnChangeLabel.text = String(magneticaVC.fontSize)
         
         
