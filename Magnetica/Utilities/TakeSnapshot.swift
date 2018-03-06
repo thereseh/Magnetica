@@ -2,7 +2,7 @@
 //  TakeSnapshot.swift
 //  Magnetica
 //
-//  Created by Therese Henriksson (RIT Student) on 3/5/18.
+//  Created by Therese Henriksson and Lydia Wu on 3/5/18.
 //  Copyright © 2018 Therese Henriksson. All rights reserved.
 //
 

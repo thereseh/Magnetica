@@ -220,6 +220,7 @@ class ViewController: UIViewController {
             
             currentLabel.isUserInteractionEnabled = true
             let panGesture = UIPanGestureRecognizer(target: self, action: #selector(doPanGesture))
+            
             currentLabel.addGestureRecognizer(panGesture)
             count += 1
         }
@@ -234,6 +235,11 @@ class ViewController: UIViewController {
             
             // add drag gesture to new copy
             label.addGestureRecognizer(panGesture)
+            
+            let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(doRotateGesture))
+            
+            label.addGestureRecognizer(rotateGesture)
+            
             view.addSubview(label)
         }
     }
@@ -248,6 +254,10 @@ class ViewController: UIViewController {
         
         // add drag gesture to new copy
         copyLabel.addGestureRecognizer(panGesture)
+        
+        let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(doRotateGesture))
+        
+        copyLabel.addGestureRecognizer(rotateGesture)
         
         addDropShadowHelper(label: copyLabel)
         magneticaVC.wordPosition.append(copyLabel)
@@ -389,6 +399,11 @@ class ViewController: UIViewController {
                     position.x >= trashcanButton.center.x - (trashcanButton.frame.size.width/2) &&
                     position.y <= trashcanButton.center.y + (trashcanButton.frame.size.height/2) &&
                     position.y >= trashcanButton.center.y - (trashcanButton.frame.size.height/2) {
+                    
+                    if let idx = magneticaVC.wordPosition.index(of:label) {
+                        magneticaVC.wordPosition.remove(at: idx)
+                    }
+                    
                     label.removeFromSuperview()
                 }
             }
@@ -407,6 +422,21 @@ class ViewController: UIViewController {
             
         }
         
+        
+    }
+    
+    @objc func doRotateGesture(_ rotateGeture:UIRotationGestureRecognizer) {
+        let label = rotateGeture.view as! UILabel
+        let position = rotateGeture.location(in: view)
+        label.center = position
+        
+        guard rotateGeture.view != nil else { return }
+        
+        if rotateGeture.state == .began || rotateGeture.state == .changed {
+            rotateGeture.view?.transform = rotateGeture.view!.transform.rotated(by: rotateGeture.rotation)
+            label.transform = label.transform.rotated(by: rotateGeture.rotation)
+            rotateGeture.rotation = 0
+        }
         
     }
     
