@@ -29,7 +29,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <barButtonItem systemItem="trash" id="FM8-gi-0s6"/>
+                                    <barButtonItem title="Share" id="aQx-sa-0Ga"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="cha-d2-Sda"/>
                                     <barButtonItem title="Themes" id="WiT-iE-uaB">
                                         <connections>
@@ -71,6 +71,12 @@
                                     <action selector="hideAndShowLabelView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NXB-3u-uhe"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JxN-b9-zsS">
+                                <rect key="frame" x="16" y="591" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
+                                <state key="normal" backgroundImage="trashButton"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -79,6 +85,7 @@
                         <outlet property="hideLabelHolderView" destination="gZz-ya-QXF" id="BNA-0c-3xa"/>
                         <outlet property="labelHolderView" destination="MLX-Kc-oby" id="Xd9-Gl-5Pp"/>
                         <outlet property="moreLabelsButton" destination="bKW-bS-awa" id="tjn-ga-b7E"/>
+                        <outlet property="trashcanButton" destination="JxN-b9-zsS" id="tJ8-28-DGc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -295,6 +302,37 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" indentationWidth="10" reuseIdentifier="settingsIdentifier" focusStyle="custom" rowHeight="47" id="Whd-VZ-Ybd">
+                                        <rect key="frame" x="0.0" y="469.5" width="375" height="47"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Whd-VZ-Ybd" id="c22-3v-iuE">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="47"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remove Image" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pbX-nd-5AN">
+                                                    <rect key="frame" x="16" y="13" width="113" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ffR-xB-vFA">
+                                                    <rect key="frame" x="324" y="12" width="25" height="25"/>
+                                                    <state key="normal" backgroundImage="removeButton"/>
+                                                    <connections>
+                                                        <action selector="removeBackgroundImageWithSender:" destination="ZU8-yb-M7V" eventType="touchUpInside" id="flz-LY-iil"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="pbX-nd-5AN" firstAttribute="centerY" secondItem="c22-3v-iuE" secondAttribute="centerY" id="1Ib-je-7AM"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="ffR-xB-vFA" secondAttribute="bottom" constant="-1" id="2Be-Lo-9Oc"/>
+                                                <constraint firstItem="pbX-nd-5AN" firstAttribute="leading" secondItem="c22-3v-iuE" secondAttribute="leadingMargin" id="DqB-lN-JaQ"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="ffR-xB-vFA" secondAttribute="trailing" constant="10" id="Zco-4R-kS6"/>
+                                                <constraint firstAttribute="trailing" secondItem="pbX-nd-5AN" secondAttribute="trailing" priority="250" constant="246" id="icx-mu-FGH"/>
+                                                <constraint firstItem="ffR-xB-vFA" firstAttribute="top" secondItem="c22-3v-iuE" secondAttribute="topMargin" constant="1" id="zlr-gv-JIe"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -349,5 +387,7 @@
         <image name="Settings" width="25" height="25"/>
         <image name="hideButton" width="25" height="25"/>
         <image name="nextButton" width="25" height="25"/>
+        <image name="removeButton" width="25" height="25"/>
+        <image name="trashButton" width="25" height="25"/>
     </resources>
 </document>

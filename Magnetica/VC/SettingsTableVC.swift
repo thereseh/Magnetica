@@ -159,6 +159,13 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
         sender.setValue(round(sender.value), animated: true)
     }
     
+    // IBActions
+    @IBAction func removeBackgroundImage(sender: AnyObject) {
+        let nCenter = NotificationCenter.default
+        
+        nCenter.post(name: removeBackgroundImageNotification, object: self)
+    }
+    
     
 }
 

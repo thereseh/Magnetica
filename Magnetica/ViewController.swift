@@ -13,6 +13,8 @@ let fontStyleChangedNotification = NSNotification.Name("fontStyleChangedNotifica
 let fontSizeChangedNotification = NSNotification.Name("fontSizeChangedNotification")
 let backgroundColorChangedNotification = NSNotification.Name("backgroundColorChangedNotification")
 let updateScreenNotification = NSNotification.Name("updateScreenNotification")
+let removeBackgroundImageNotification = NSNotification.Name("removeBackgroundImageNotification")
+
 
 let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
@@ -41,6 +43,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var labelHolderView: UIView!
     @IBOutlet weak var moreLabelsButton: UIButton!
     @IBOutlet weak var hideLabelHolderView: UIButton!
+    @IBOutlet weak var trashcanButton: UIButton!
     
     
     override func viewDidLoad() {
@@ -57,6 +60,7 @@ class ViewController: UIViewController {
         nCenter.addObserver(self, selector: #selector(updateFontSize), name: fontSizeChangedNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(updateBackgroundColor), name: backgroundColorChangedNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(updateTheme), name: myWordThemeChangedNotification, object: nil)
+        nCenter.addObserver(self, selector: #selector(removeBackgroundImage), name: removeBackgroundImageNotification, object: nil)
         
         
         setLabelViewSize()
@@ -181,6 +185,7 @@ class ViewController: UIViewController {
             let size = moreLabelsButton.frame.size.height + 8
             moreLabelsButton.frame.size = CGSize(width: size, height: size)
             hideLabelHolderView.frame.size = CGSize(width: size, height: size)
+            trashcanButton.frame.size = CGSize(width: size, height: size)
             
         }
         
@@ -190,6 +195,7 @@ class ViewController: UIViewController {
         // Set position of buttons
         moreLabelsButton.center = CGPoint(x: xPos, y: yPos)
         hideLabelHolderView.center = CGPoint(x: xPos - hideLabelHolderView.frame.width * 2, y: yPos)
+        trashcanButton.center = CGPoint(x: 32, y: view.frame.size.height - 44 - trashcanButton.frame.size.height)
         
     }
     
@@ -223,6 +229,8 @@ class ViewController: UIViewController {
         // remove original label
         label.removeFromSuperview()
     }
+    
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showThemeSegue" {
@@ -283,6 +291,11 @@ class ViewController: UIViewController {
         placeWords()
     }
     
+    @objc func removeBackgroundImage() {
+        magneticaVC.hasBackgroundImage = false
+        (self.view as! UIImageView).image = nil
+    }
+    
     
     @objc func doPanGesture(panGeture:UIPanGestureRecognizer) {
         let label = panGeture.view as! UILabel
@@ -297,12 +310,34 @@ class ViewController: UIViewController {
 
                 }
             }
+            
+            // remove label if over trashcan on release
+            if label.superview == view {
+                if position.x <= trashcanButton.center.x + (trashcanButton.frame.size.width/2) &&
+                    position.x >= trashcanButton.center.x - (trashcanButton.frame.size.width/2) &&
+                    position.y <= trashcanButton.center.y + (trashcanButton.frame.size.height/2) &&
+                    position.y >= trashcanButton.center.y - (trashcanButton.frame.size.height/2) {
+                    label.removeFromSuperview()
+                }
+            }
+        }
+        
+        // when dragging, animate trashcan button
+        if label.superview == view {
+                
+            if position.x <= trashcanButton.center.x + (trashcanButton.frame.size.width/2) &&
+                position.x >= trashcanButton.center.x - (trashcanButton.frame.size.width/2) &&
+                position.y <= trashcanButton.center.y + (trashcanButton.frame.size.height/2) &&
+                position.y >= trashcanButton.center.y - (trashcanButton.frame.size.height/2) {
+                    trashcanButton.shake()
+            }
+
+               
         }
         
         
     }
 
-    
     
     // IBActions
     @IBAction func getMoreLabels(_ sender: UIButton) {
@@ -360,6 +395,30 @@ extension UILabel {
     func createCopy() -> UILabel {
         let archivedData = NSKeyedArchiver.archivedData(withRootObject: self)
         return NSKeyedUnarchiver.unarchiveObject(with: archivedData) as! UILabel
+    }
+}
+
+
+// http://seanallen.co/posts/uibutton-animations
+extension UIButton {
+    
+    func shake() {
+        print("shaking")
+        let shake = CABasicAnimation(keyPath: "position")
+        shake.duration = 0.1
+        shake.repeatCount = 2
+        shake.autoreverses = true
+
+        let fromPoint = CGPoint(x: center.x - 5, y: center.y)
+        let fromValue = NSValue(cgPoint: fromPoint)
+
+        let toPoint = CGPoint(x: center.x + 5, y: center.y)
+        let toValue = NSValue(cgPoint: toPoint)
+
+        shake.fromValue = fromValue
+        shake.toValue = toValue
+
+        layer.add(shake, forKey: "position")
     }
 }
 
