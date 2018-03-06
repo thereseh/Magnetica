@@ -35,6 +35,7 @@ class ViewController: UIViewController {
     var labelViewIsHidden = false
     
     var currentTheme: [WordModel] = []
+    var draggedLabels: [UILabel] = []
     
     // Outlets
     @IBOutlet weak var labelHolderView: UIView!
@@ -49,7 +50,6 @@ class ViewController: UIViewController {
         
         assert(magneticaVC != nil, "MagneticaVC must be set before using property via dependency injection")
         
-        
         let nCenter = NotificationCenter.default
         nCenter.addObserver(self, selector: #selector(updateScreen), name: updateScreenNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(updateBackground), name: backgroundImageChangedNotification, object: nil)
@@ -57,6 +57,7 @@ class ViewController: UIViewController {
         nCenter.addObserver(self, selector: #selector(updateFontSize), name: fontSizeChangedNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(updateBackgroundColor), name: backgroundColorChangedNotification, object: nil)
         nCenter.addObserver(self, selector: #selector(updateTheme), name: myWordThemeChangedNotification, object: nil)
+        
         
         setLabelViewSize()
         placeWords()
@@ -158,6 +159,12 @@ class ViewController: UIViewController {
         
     }
     
+    func drawLabelsOnView() {
+        for label in draggedLabels {
+            view.addSubview(label)
+        }
+    }
+    
     func setLabelViewSize() {
         
         labelHolderView.frame = CGRect(x: 0, y: 32, width: view.frame.width, height: (view.frame.height / 4.0))
@@ -168,6 +175,14 @@ class ViewController: UIViewController {
         labelHolderView.layer.shadowOpacity = 0.8
         labelHolderView.layer.shadowOffset = CGSize(width:1, height: 2)
         labelHolderView.layer.masksToBounds = false
+        
+        // make buttons bigger if iPad
+        if isPad {
+            let size = moreLabelsButton.frame.size.height + 8
+            moreLabelsButton.frame.size = CGSize(width: size, height: size)
+            hideLabelHolderView.frame.size = CGSize(width: size, height: size)
+            
+        }
         
         let xPos = view.frame.width - moreLabelsButton.frame.width
         let yPos = (view.frame.height / 4.0) + 32 + moreLabelsButton.frame.height
@@ -185,6 +200,41 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    // Takes a label from the label view and creates a copy
+    // to be drawn on the main view
+    func copyDraggedLabel(label: UILabel) {
+        let copyLabel = label.createCopy()
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(doPanGesture))
+        
+        // add drag gesture to new copy
+        copyLabel.addGestureRecognizer(panGesture)
+        
+        // add dropshadow
+        copyLabel.layer.shadowColor = UIColor.black.cgColor
+        copyLabel.layer.shadowRadius = 1.0
+        copyLabel.layer.shadowOpacity = 0.8
+        copyLabel.layer.shadowOffset = CGSize(width:1, height: 1)
+        copyLabel.layer.masksToBounds = false
+        draggedLabels.append(copyLabel)
+        
+        view.addSubview(copyLabel)
+        
+        // remove original label
+        label.removeFromSuperview()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showThemeSegue" {
+            let wordsVC = segue.destination.childViewControllers[0] as! WordsTableVC
+            wordsVC.title = "Choose a theme"
+        }
+        
+        if segue.identifier == "showSettingsSegue" {
+        }
+    }
+    
+    
     
     // MARK: - Notifications -
     @objc func updateBackground(n:Notification) {
@@ -234,23 +284,25 @@ class ViewController: UIViewController {
     }
     
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showThemeSegue" {
-            let wordsVC = segue.destination.childViewControllers[0] as! WordsTableVC
-            wordsVC.title = "Choose a theme"
-        }
-        
-        if segue.identifier == "showSettingsSegue" {
-        }
-    }
-    
-    
-    
     @objc func doPanGesture(panGeture:UIPanGestureRecognizer) {
         let label = panGeture.view as! UILabel
         let position = panGeture.location(in: view)
         label.center = position
+        
+        if panGeture.state == UIGestureRecognizerState.ended {
+        
+            if label.superview == labelHolderView {
+                if position.y > labelHolderView.frame.height + label.frame.size.height {
+                    copyDraggedLabel(label: label)
+
+                }
+            }
+        }
+        
+        
     }
+
+    
     
     // IBActions
     @IBAction func getMoreLabels(_ sender: UIButton) {
@@ -272,7 +324,7 @@ class ViewController: UIViewController {
                 
             }, completion: {finished in
                 
-                self.hideLabelHolderView.setImage(UIImage(named: "hideButton"), for: .normal)
+                self.hideLabelHolderView.setBackgroundImage(UIImage(named: "hideButton"), for: .normal)
                 self.placeWords()
                 self.moreLabelsButton.isHidden = false
                 
@@ -289,7 +341,7 @@ class ViewController: UIViewController {
                 self.moreLabelsButton.isHidden = true
                 
             }, completion: {finished in
-                self.hideLabelHolderView.setImage(UIImage(named: "showButton"), for: .normal)
+                self.hideLabelHolderView.setBackgroundImage(UIImage(named: "showButton"), for: .normal)
             })
         }
     }
@@ -301,6 +353,13 @@ extension Array {
         if isEmpty { return nil }
         let index = Int(arc4random_uniform(UInt32(self.count)))
         return self[index]
+    }
+}
+
+extension UILabel {
+    func createCopy() -> UILabel {
+        let archivedData = NSKeyedArchiver.archivedData(withRootObject: self)
+        return NSKeyedUnarchiver.unarchiveObject(with: archivedData) as! UILabel
     }
 }
 
