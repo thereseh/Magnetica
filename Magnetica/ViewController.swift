@@ -253,6 +253,9 @@ class ViewController: UIViewController {
         label.removeFromSuperview()
     }
     
+    func resetTimer() {
+        saveTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(timedSave), userInfo: nil, repeats: true)
+    }
     
     func addDropShadowHelper(label: AnyObject) {
         // add dropshadow
@@ -360,7 +363,7 @@ class ViewController: UIViewController {
         (self.view as! UIImageView).image = nil
     }
     
-    
+    //MARK: - GestureRecognizer-
     @objc func doPanGesture(panGeture:UIPanGestureRecognizer) {
         let label = panGeture.view as! UILabel
         let position = panGeture.location(in: view)
