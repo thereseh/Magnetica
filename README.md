@@ -23,3 +23,15 @@ Yanchun Wu</p>
   <img src = "https://github.com/thereseh/Magnetica/blob/master/Images/7E304902257707511C2D4F58F1F34C2B.png">
   <img src = "https://github.com/thereseh/Magnetica/blob/master/Images/9CEBAB3276766E5141D6AAE865246899.png">
 </p>
+
+<h3>Checkpoint 3</h3>
+<p>We finished all processes, and now our app is able to change themes, background images, font sizes, fonts, etc.</p>
+<p align="center">
+  <img src = "https://github.com/thereseh/Magnetica/blob/master/Images/1.jpg">
+  <img src = "https://github.com/thereseh/Magnetica/blob/master/Images/2.jpg">
+  <img src = "https://github.com/thereseh/Magnetica/blob/master/Images/3.jpg">
+  <img src = "https://github.com/thereseh/Magnetica/blob/master/Images/4.jpg">
+  <img src = "https://github.com/thereseh/Magnetica/blob/master/Images/5.jpg">
+  <img src = "https://github.com/thereseh/Magnetica/blob/master/Images/6.jpg">
+  <img src = "https://github.com/thereseh/Magnetica/blob/master/Images/7.jpg">
+</p>
