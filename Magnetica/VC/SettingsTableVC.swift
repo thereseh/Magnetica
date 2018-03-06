@@ -23,7 +23,7 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
                       (name: "White", value: UIColor.white), (name: "Orange", value: UIColor.orange),
                       (name: "Purple", value: UIColor.purple), (name: "Magenta", value: UIColor.magenta),
                       (name: "Yellow", value: UIColor.yellow)]
-    
+    var magneticaVC: MagneticaVC!
     
     // outlets
     @IBOutlet weak var fontStylePicker: UIPickerView!
@@ -41,6 +41,23 @@ class SettingsTableVC: UITableViewController, UIPickerViewDelegate, UIPickerView
         self.fontColorPicker.delegate = self
         self.fontColorPicker.dataSource = self
         
+        magneticaVC = MagneticaVC()
+        fontSizeSlider.value = Float(magneticaVC.fontSize)
+        fontSizeOnChangeLabel.text = String(magneticaVC.fontSize)
+        
+        
+        for (index, font) in familyNames.enumerated() {
+            if font == magneticaVC.fontStyle {
+                fontStylePicker.selectRow(index, inComponent: 0, animated: true)
+            }
+        }
+
+        
+        for (index, color) in backgroundColors.enumerated() {
+            if color.value == magneticaVC.backgroundColor {
+                fontColorPicker.selectRow(index, inComponent: 0, animated: true)
+            }
+        }
     }
     
     // Functions

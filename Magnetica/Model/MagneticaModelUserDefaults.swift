@@ -17,7 +17,7 @@ class MagneticaModelUserDefaults: MagneticaModel {
     var backgroundColor: UIColor
     var backgroundImage: UIImage?
     var selectedTheme: String
-    var wordPosition: [WordModel]?
+    var wordPosition: [UILabel]?
     var hasBackgroundImage: Bool
     
     // Initializer Dependency Injection with a default value
@@ -110,7 +110,7 @@ class MagneticaModelUserDefaults: MagneticaModel {
             self.selectedTheme = Constants.MagneticaConstants.defaultTheme
         }
         
-        if let wordPosition = defaults.value(forKey: Constants.MagneticaConstants.kwordsKey) as? [WordModel] {
+        if let wordPosition = defaults.value(forKey: Constants.MagneticaConstants.kwordsKey) as? [UILabel] {
             self.wordPosition = wordPosition
         } else {
             self.wordPosition = Constants.MagneticaConstants.defaultWordPosition
